@@ -1,0 +1,47 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+.venv/
+env/
+venv/
+ENV/
+*.env
+
+# Poetry
+poetry.lock
+
+# VSCode / PyCharm
+.vscode/
+.idea/
+
+# macOS system files
+.DS_Store
+
+# Test / coverage / logs
+.coverage
+htmlcov/
+.tox/
+.pytest_cache/
+*.log
+
+# Builds
+build/
+dist/
+*.egg-info/
+
+# CSV, artifacts (можно убрать из гита по желанию)
+*.csv
+exported_data/
+
+# Docker
+*.pid
+
+# mypy / flake8 cache
+.mypy_cache/
+.cache/
+
+
+

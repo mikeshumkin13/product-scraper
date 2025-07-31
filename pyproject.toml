@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "product-scraper"
+version = "0.1.0"
+description = ""
+authors = ["a12345 <shu.m2010@yandex.ru>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = ">=3.12,<4.0"
+requests = "^2.32.4"
+beautifulsoup4 = "^4.13.4"
+
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.4.1"
+flake8 = "^7.3.0"
+black = "^25.1.0"
+isort = "^6.0.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
