@@ -14,5 +14,3 @@ def export_to_csv(data: List[Dict], filename: str = "products.csv") -> None:
         writer.writerows(data)
 
     print(f"Данные успешно сохранены в {filename}")
-
-

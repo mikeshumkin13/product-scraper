@@ -16,5 +16,3 @@ class BaseParser(ABC):
     def run(self, url: str) -> List[Dict]:
         html = self.fetch_page(url)
         return self.parse(html)
-
-

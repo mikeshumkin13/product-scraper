@@ -26,21 +26,21 @@ class BooksParser(BaseParser):
         items = soup.select("article.product_pod")
         for item in items:
             title = item.h3.a["title"]
-            relative_url = item.h3.a["href"].replace('../../../', '')
+            relative_url = item.h3.a["href"].replace("../../../", "")
             link = "https://books.toscrape.com/catalogue/" + relative_url
             price_text = item.select_one(".price_color").text
             price = self._extract_price(price_text)
 
-            products.append({
-                "name": title,
-                "url": link,
-                "price": price,
-            })
+            products.append(
+                {
+                    "name": title,
+                    "url": link,
+                    "price": price,
+                }
+            )
 
         return products
 
     def _extract_price(self, price_str: str) -> float:
         match = re.search(r"[\d.]+", price_str)
         return float(match.group()) if match else 0.0
-
-

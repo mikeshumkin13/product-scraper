@@ -6,9 +6,18 @@ from utils.csv_export import export_to_csv
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Product Scraper — парсинг товаров и экспорт в CSV.")
-    parser.add_argument('--url', type=str, required=True, help='URL страницы для парсинга')
-    parser.add_argument('--output', type=str, default='products.csv', help='Имя файла для сохранения результатов (по умолчанию: products.csv)')
+    parser = argparse.ArgumentParser(
+        description="Product Scraper — парсинг товаров и экспорт в CSV."
+    )
+    parser.add_argument(
+        "--url", type=str, required=True, help="URL страницы для парсинга"
+    )
+    parser.add_argument(
+        "--output",
+        type=str,
+        default="products.csv",
+        help="Имя файла для сохранения результатов (по умолчанию: products.csv)",
+    )
 
     args = parser.parse_args()
 
@@ -27,5 +36,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-

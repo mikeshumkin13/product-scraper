@@ -2,6 +2,7 @@ import os
 import csv
 from utils.csv_export import export_to_csv
 
+
 def test_export_to_csv_creates_file(tmp_path):
     # Пример данных
     products = [
@@ -17,10 +18,8 @@ def test_export_to_csv_creates_file(tmp_path):
     assert file_path.exists()
 
     # Проверим содержимое
-    with open(file_path, newline='', encoding='utf-8') as f:
+    with open(file_path, newline="", encoding="utf-8") as f:
         reader = csv.DictReader(f)
         rows = list(reader)
         assert len(rows) == 1
-        assert rows[0]['name'] == "Test Product"
-
-
+        assert rows[0]["name"] == "Test Product"
