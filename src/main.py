@@ -1,38 +1,70 @@
 import argparse
-import sys
-
-from parser.books_parser import BooksParser
 from utils.csv_export import export_to_csv
+from parser.dns_search import DNSSearchParser
+from parser.citilink_search import search_citilink
+from parser.wildberries_search import search_wildberries
+from parser.ozon_search import search_ozon
 
 
 def main():
-    parser = argparse.ArgumentParser(
-        description="Product Scraper — парсинг товаров и экспорт в CSV."
-    )
-    parser.add_argument(
-        "--url", type=str, required=True, help="URL страницы для парсинга"
-    )
-    parser.add_argument(
-        "--output",
-        type=str,
-        default="products.csv",
-        help="Имя файла для сохранения результатов (по умолчанию: products.csv)",
-    )
+    parser = argparse.ArgumentParser(description="🛍 Product Scraper")
 
+    parser.add_argument("--query", type=str, help="🔍 Название товара для поиска")
+    parser.add_argument("--output", type=str, default="results.csv", help="📁 Имя CSV файла")
     args = parser.parse_args()
 
-    try:
-        scraper = BooksParser()
-        html = scraper.fetch_page(args.url)
-        products = scraper.parse(html)
-        export_to_csv(products, args.output)
-        print(f"✅ Данные успешно сохранены в {args.output}")
-        sys.exit(0)
+    if not args.query:
+        print("⚠️ Укажи --query. Пример: --query 'iPhone 15'")
+        return
 
+    query = args.query
+    all_products = []
+
+    print(f"🔎 Ищем товары по запросу: {query}\n")
+
+    # DNS
+    try:
+        dns_parser = DNSSearchParser()
+        dns_products = dns_parser.search(query)
+        all_products.extend(dns_products)
+        print(f"📦 DNS: найдено {len(dns_products)}")
     except Exception as e:
-        print(f"❌ Ошибка: {e}")
-        sys.exit(1)
+        print(f"❌ DNS: ошибка — {e}")
+
+    # Citilink
+    try:
+        citilink_products = search_citilink(query)
+        all_products.extend(citilink_products)
+        print(f"📦 Citilink: найдено {len(citilink_products)}")
+    except Exception as e:
+        print(f"❌ Citilink: ошибка — {e}")
+
+    # Wildberries
+    try:
+        wb_products = search_wildberries(query)
+        all_products.extend(wb_products)
+        print(f"📦 Wildberries: найдено {len(wb_products)}")
+    except Exception as e:
+        print(f"❌ Wildberries: ошибка — {e}")
+
+    # Ozon
+    try:
+        ozon_products = search_ozon(query)
+        all_products.extend(ozon_products)
+        print(f"📦 Ozon: найдено {len(ozon_products)}")
+    except Exception as e:
+        print(f"❌ Ozon: ошибка — {e}")
+
+    # Итог
+    if not all_products:
+        print("\n⚠️ Ничего не найдено ни на одном сайте.")
+        return
+
+    export_to_csv(all_products, args.output)
+    print(f"\n✅ Всего найдено {len(all_products)} товаров. Сохранено в файл {args.output}")
 
 
 if __name__ == "__main__":
     main()
+
+
