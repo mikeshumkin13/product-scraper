@@ -8,7 +8,7 @@ def export_to_csv(data: List[Dict], filename: str = "products.csv") -> None:
         return
 
     fieldnames = data[0].keys()
-    with open(filename, mode="w", newline="", encoding="utf-8") as file:
+    with open(str(filename), mode="w", newline="", encoding="utf-8") as file:
         writer = csv.DictWriter(file, fieldnames=fieldnames)
         writer.writeheader()
         writer.writerows(data)
