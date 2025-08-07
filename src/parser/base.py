@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import List, Dict
+from dataclasses import dataclass
 
 
 class BaseParser(ABC):
@@ -16,3 +17,14 @@ class BaseParser(ABC):
     def run(self, url: str) -> List[Dict]:
         html = self.fetch_page(url)
         return self.parse(html)
+
+
+@dataclass
+class Product:
+    """
+    Класс продукта для унифицированного представления товара.
+    """
+
+    name: str
+    url: str
+    price: int | str  # int для чисел, str для форматированного вывода

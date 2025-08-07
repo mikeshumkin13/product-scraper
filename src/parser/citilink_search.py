@@ -1,61 +1,63 @@
 import time
-import requests
+from typing import List
+
 from bs4 import BeautifulSoup
-from typing import List, Dict
-import urllib.parse
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+
+from utils.selenium_driver import create_driver
+from .base import Product
 
 
-def search_citilink(query: str) -> List[Dict]:
-    base_url = "https://www.citilink.ru/search/"
-    headers = {
-        "User-Agent": (
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-            "AppleWebKit/537.36 (KHTML, like Gecko) "
-            "Chrome/114.0.0.0 Safari/537.36"
-        ),
-        "Accept-Language": "ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7",
-        "Accept": (
-            "text/html,application/xhtml+xml,application/xml;q=0.9,"
-            "image/avif,image/webp,image/apng,*/*;q=0.8"
-        ),
-        "Connection": "keep-alive",
-    }
 
-    # ⏱ задержка перед запросом
-    time.sleep(3)
+def search_citilink(query: str, mode: str = "real") -> List[Product]:
+    if mode != "real":
+        raise ValueError("Только режим 'real' поддерживается для Citilink")
 
-    params = {"text": query}
+    print("🌐 Открываем Citilink...")
+    url = f"https://www.citilink.ru/search/?text={query}"
+    driver = create_driver()
 
     try:
-        response = requests.get(base_url, headers=headers, params=params, timeout=10)
-        response.raise_for_status()
-    except requests.exceptions.HTTPError as e:
-        if response.status_code == 429:
-            raise Exception("🔒 Заблокировано Citilink: Too Many Requests (429)")
-        else:
-            raise
+        driver.get(url)
+        time.sleep(5)
 
-    soup = BeautifulSoup(response.text, "html.parser")
-    products = []
+        WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.CLASS_NAME, "ProductCardHorizontal__header-block"))
+        )
 
-    items = soup.select("div.ProductCardHorizontal__header")
-    prices = soup.select("div.ProductCardHorizontal__price_current-price")
+        driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+        time.sleep(2)
 
-    for item, price_item in zip(items, prices):
-        title_tag = item.select_one("a")
-        if not title_tag:
-            continue
+        html = driver.page_source
+        soup = BeautifulSoup(html, "html.parser")
 
-        name = title_tag.text.strip()
-        url = urllib.parse.urljoin("https://www.citilink.ru", title_tag["href"])
-        price = price_item.text.strip()
+        product_cards = soup.select("div.ProductCardHorizontal")
+        products = []
 
-        products.append({
-            "name": name,
-            "url": url,
-            "price": price,
-        })
+        for card in product_cards[:10]:
+            try:
+                name_tag = card.select_one(".ProductCardHorizontal__title")
+                price_tag = card.select_one(".ProductCardHorizontal__price_current-price")
+                link_tag = card.select_one("a.ProductCardHorizontal__title")
 
-    return products
+                name = name_tag.get_text(strip=True) if name_tag else "Без названия"
+                price = price_tag.get_text(strip=True).replace("\u2009", "") if price_tag else "Нет цены"
+                url = "https://www.citilink.ru" + link_tag["href"] if link_tag and link_tag.has_attr("href") else ""
+
+                products.append(Product(name=name, price=price, link=url, source="Citilink"))
+            except Exception:
+                continue
+
+        print(f"📦 Citilink: найдено {len(products)}")
+        return products
+
+    except Exception as e:
+        print("❌ Citilink: ошибка —", e)
+        return []
+
+    finally:
+        driver.quit()
 
 

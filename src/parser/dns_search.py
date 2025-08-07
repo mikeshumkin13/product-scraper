@@ -1,43 +1,63 @@
-import requests
+import time
+from typing import List
+
 from bs4 import BeautifulSoup
-from typing import List, Dict
-import re
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+
+from utils.selenium_driver import create_driver
+from .base import Product
 
 
-class DNSSearchParser:
-    BASE_URL = "https://www.dns-shop.ru"
 
-    def search(self, query: str) -> List[Dict]:
-        search_url = f"{self.BASE_URL}/search/?q=" + query.replace(" ", "+")
-        headers = {
-            "User-Agent": (
-                "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
-                "AppleWebKit/537.36 (KHTML, like Gecko) "
-                "Chrome/115.0.0.0 Safari/537.36"
-            )
-        }
+def search_dns(query: str, mode: str = "real") -> List[Product]:
+    if mode != "real":
+        raise ValueError("Только режим 'real' поддерживается для DNS")
 
-        response = requests.get(search_url, headers=headers, timeout=10)
-        response.raise_for_status()
-        soup = BeautifulSoup(response.text, "html.parser")
+    print("🌐 Открываем DNS...")
+    url = f"https://www.dns-shop.ru/search/?q={query}"
+    driver = create_driver()
 
+    try:
+        driver.get(url)
+        time.sleep(5)
+
+        WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.CLASS_NAME, "catalog-product"))
+        )
+
+        driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+        time.sleep(2)
+
+        html = driver.page_source
+        soup = BeautifulSoup(html, "html.parser")
+
+        product_cards = soup.select("div.catalog-product")
         products = []
 
-        for item in soup.select(".catalog-product"):
-            name_el = item.select_one(".catalog-product__name")
-            price_el = item.select_one(".product-buy__price")
+        for card in product_cards[:10]:
+            try:
+                name_tag = card.select_one("a.catalog-product__name")
+                price_tag = card.select_one("div.catalog-product__price-current")
+                link_tag = name_tag
 
-            if name_el and price_el:
-                name = name_el.get_text(strip=True)
-                url = self.BASE_URL + name_el.get("href")
-                price = price_el.get_text(strip=True)
+                name = name_tag.get_text(strip=True) if name_tag else "Без названия"
+                price = price_tag.get_text(strip=True).replace("\u2009", "") if price_tag else "Нет цены"
+                url = "https://www.dns-shop.ru" + link_tag["href"] if link_tag and link_tag.has_attr("href") else ""
 
-                products.append({
-                    "name": name,
-                    "url": url,
-                    "price": price,
-                })
+                products.append(Product(name=name, price=price, link=url, source="DNS"))
+            except Exception:
+                continue
 
+        print(f"📦 DNS: найдено {len(products)}")
         return products
+
+    except Exception as e:
+        print("❌ DNS: ошибка —", e)
+        return []
+
+    finally:
+        driver.quit()
 
 

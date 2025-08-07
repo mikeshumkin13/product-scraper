@@ -1,0 +1,16 @@
+{
+  "products": [
+    {"name": "Ноутбук ASUS VivoBook 15", "priceU": 4599900, "id": 100001},
+    {"name": "Ноутбук HP Pavilion", "priceU": 5299900, "id": 100002},
+    {"name": "Наушники Sony WH-1000XM4", "priceU": 1999900, "id": 100003},
+    {"name": "Наушники JBL Tune 510BT", "priceU": 399900, "id": 100004},
+    {"name": "Смартфон Samsung Galaxy S23", "priceU": 7999900, "id": 100005},
+    {"name": "Смартфон Xiaomi Redmi Note 12", "priceU": 2599900, "id": 100006},
+    {"name": "Чайник электрический Philips", "priceU": 249900, "id": 100007},
+    {"name": "Пылесос робот Xiaomi Mi Robot", "priceU": 1299900, "id": 100008},
+    {"name": "Кастрюля Tefal 5л", "priceU": 159900, "id": 100009},
+    {"name": "Ложки столовые набор 6 шт", "priceU": 99900, "id": 100010}
+  ]
+}
+
+

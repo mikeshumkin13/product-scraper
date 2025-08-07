@@ -7,8 +7,12 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = ">=3.12,<4.0"
-requests = "^2.32.4"
+requests = {extras = ["socks"], version = "^2.32.4"}
 beautifulsoup4 = "^4.13.4"
+lxml = "^6.0.0"
+selenium = "^4.34.2"
+webdriver-manager = "^4.0.2"
+undetected-chromedriver = "^3.5.5"
 
 
 [tool.poetry.group.dev.dependencies]
