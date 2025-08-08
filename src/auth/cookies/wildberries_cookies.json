@@ -1,0 +1,41 @@
+[
+  {
+    "domain": ".wildberries.ru",
+    "expiry": 1757253329,
+    "httpOnly": true,
+    "name": "wbx-validation-key",
+    "path": "/",
+    "sameSite": "Lax",
+    "secure": true,
+    "value": "c6abd9ae-6cbc-4183-9908-9a03400dcf08"
+  },
+  {
+    "domain": "www.wildberries.ru",
+    "httpOnly": true,
+    "name": "routeb",
+    "path": "/",
+    "sameSite": "Lax",
+    "secure": false,
+    "value": "1754661331.061.68.537513|d4ae5f6f13c2fcce539dd766ca4b41fc"
+  },
+  {
+    "domain": ".www.wildberries.ru",
+    "expiry": 1786197255,
+    "httpOnly": false,
+    "name": "_wbauid",
+    "path": "/",
+    "sameSite": "Lax",
+    "secure": false,
+    "value": "7942477481754661255"
+  },
+  {
+    "domain": "www.wildberries.ru",
+    "expiry": 1755870850,
+    "httpOnly": false,
+    "name": "x_wbaas_token",
+    "path": "/",
+    "sameSite": "None",
+    "secure": true,
+    "value": "1|2|1755870847|AA==|138e635c6e044b5e89af6f5c015b1ee2|XExJ8Fhu5JoYfWIZLawL7biiTxUf66sP64ftndHjnnO"
+  }
+]

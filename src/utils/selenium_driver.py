@@ -4,7 +4,7 @@ from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 
 
-def create_driver(headless: bool = False) -> webdriver.Chrome:
+def get_selenium_driver(headless: bool = False) -> webdriver.Chrome:
     """
     Создаёт и настраивает экземпляр Chrome WebDriver.
     :param headless: Запускать браузер в фоновом режиме

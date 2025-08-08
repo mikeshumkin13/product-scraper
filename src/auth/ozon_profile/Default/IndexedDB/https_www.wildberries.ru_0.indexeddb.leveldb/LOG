@@ -1,0 +1,62 @@
+2025/08/08-16:54:14.676 9681 Creating DB /Users/a12345/product_scraper/src/auth/ozon_profile/Default/IndexedDB/https_www.wildberries.ru_0.indexeddb.leveldb since it was missing.
+2025/08/08-16:54:14.680 9681 Reusing MANIFEST /Users/a12345/product_scraper/src/auth/ozon_profile/Default/IndexedDB/https_www.wildberries.ru_0.indexeddb.leveldb/MANIFEST-000001
+2025/08/08-16:54:20.566 9681 Level-0 table #5: started
+2025/08/08-16:54:20.592 9681 Level-0 table #5: 886622 bytes OK
+2025/08/08-16:54:20.594 9681 Delete type=0 #3
+2025/08/08-16:54:20.912 9681 Level-0 table #7: started
+2025/08/08-16:54:20.939 9681 Level-0 table #7: 890078 bytes OK
+2025/08/08-16:54:20.940 9681 Delete type=0 #4
+2025/08/08-16:54:20.942 9681 Compacting 1@1 + 1@2 files
+2025/08/08-16:54:20.979 9681 Generated table #8@1: 25924 keys, 821564 bytes
+2025/08/08-16:54:20.979 9681 Compacted 1@1 + 1@2 files => 821564 bytes
+2025/08/08-16:54:20.980 9681 compacted to: files[ 0 0 1 0 0 0 0 ]
+2025/08/08-16:54:20.980 9681 Delete type=2 #7
+2025/08/08-16:54:20.980 9681 Delete type=2 #5
+2025/08/08-16:54:21.233 9681 Level-0 table #10: started
+2025/08/08-16:54:21.255 9681 Level-0 table #10: 888450 bytes OK
+2025/08/08-16:54:21.257 9681 Delete type=0 #6
+2025/08/08-16:54:21.259 967f Compacting 1@1 + 1@2 files
+2025/08/08-16:54:21.303 967f Generated table #11@1: 38054 keys, 1253070 bytes
+2025/08/08-16:54:21.303 967f Compacted 1@1 + 1@2 files => 1253070 bytes
+2025/08/08-16:54:21.304 967f compacted to: files[ 0 0 1 0 0 0 0 ]
+2025/08/08-16:54:21.304 967f Delete type=2 #10
+2025/08/08-16:54:21.304 967f Delete type=2 #8
+2025/08/08-16:54:21.558 967f Level-0 table #13: started
+2025/08/08-16:54:21.579 967f Level-0 table #13: 887601 bytes OK
+2025/08/08-16:54:21.581 967f Delete type=0 #9
+2025/08/08-16:54:21.583 967f Compacting 1@1 + 1@2 files
+2025/08/08-16:54:21.636 967f Generated table #14@1: 50449 keys, 1684964 bytes
+2025/08/08-16:54:21.636 967f Compacted 1@1 + 1@2 files => 1684964 bytes
+2025/08/08-16:54:21.637 967f compacted to: files[ 0 0 1 0 0 0 0 ]
+2025/08/08-16:54:21.637 967f Delete type=2 #13
+2025/08/08-16:54:21.637 967f Delete type=2 #11
+2025/08/08-16:54:21.841 967f Level-0 table #16: started
+2025/08/08-16:54:21.863 967f Level-0 table #16: 888574 bytes OK
+2025/08/08-16:54:21.864 967f Delete type=0 #12
+2025/08/08-16:54:21.866 967f Compacting 1@1 + 1@2 files
+2025/08/08-16:54:21.931 967f Generated table #17@1: 61814 keys, 2115186 bytes
+2025/08/08-16:54:21.931 967f Compacted 1@1 + 1@2 files => 2115186 bytes
+2025/08/08-16:54:21.932 967f compacted to: files[ 0 0 1 0 0 0 0 ]
+2025/08/08-16:54:21.932 967f Delete type=2 #14
+2025/08/08-16:54:21.932 967f Delete type=2 #16
+2025/08/08-16:54:22.210 9681 Level-0 table #19: started
+2025/08/08-16:54:22.240 9681 Level-0 table #19: 905010 bytes OK
+2025/08/08-16:54:22.241 9681 Delete type=0 #15
+2025/08/08-16:54:22.244 968c Compacting 1@1 + 1@2 files
+2025/08/08-16:54:22.333 968c Generated table #20@1: 50396 keys, 2203121 bytes
+2025/08/08-16:54:22.349 968c Generated table #21@1: 23683 keys, 332962 bytes
+2025/08/08-16:54:22.349 968c Compacted 1@1 + 1@2 files => 2536083 bytes
+2025/08/08-16:54:22.350 968c compacted to: files[ 0 0 2 0 0 0 0 ]
+2025/08/08-16:54:22.351 968c Delete type=2 #17
+2025/08/08-16:54:22.351 968c Delete type=2 #19
+2025/08/08-16:54:22.637 9681 Level-0 table #23: started
+2025/08/08-16:54:22.668 9681 Level-0 table #23: 891572 bytes OK
+2025/08/08-16:54:22.671 9681 Delete type=0 #18
+2025/08/08-16:54:22.680 9681 Compacting 1@1 + 2@2 files
+2025/08/08-16:54:22.764 9681 Generated table #24@1: 40902 keys, 2192556 bytes
+2025/08/08-16:54:22.796 9681 Generated table #25@1: 46257 keys, 777133 bytes
+2025/08/08-16:54:22.796 9681 Compacted 1@1 + 2@2 files => 2969689 bytes
+2025/08/08-16:54:22.797 9681 compacted to: files[ 0 0 2 0 0 0 0 ]
+2025/08/08-16:54:22.798 9681 Delete type=2 #20
+2025/08/08-16:54:22.798 9681 Delete type=2 #21
+2025/08/08-16:54:22.798 9681 Delete type=2 #23

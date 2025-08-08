@@ -1,0 +1,9 @@
+2025/08/08-16:54:04.934 970f Reusing MANIFEST /Users/a12345/product_scraper/src/auth/ozon_profile/Default/Local Storage/leveldb/MANIFEST-000001
+2025/08/08-16:54:04.942 970f Recovering log #3
+2025/08/08-16:54:04.943 970f Reusing old log /Users/a12345/product_scraper/src/auth/ozon_profile/Default/Local Storage/leveldb/000003.log 
+2025/08/08-16:55:04.948 9711 Level-0 table #5: started
+2025/08/08-16:55:04.953 9711 Level-0 table #5: 63549 bytes OK
+2025/08/08-16:55:04.955 9711 Delete type=0 #3
+2025/08/08-16:55:40.762 9711 Level-0 table #7: started
+2025/08/08-16:55:40.768 9711 Level-0 table #7: 207372 bytes OK
+2025/08/08-16:55:40.772 9711 Delete type=0 #4

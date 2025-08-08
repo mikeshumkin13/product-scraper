@@ -1,63 +1,45 @@
 import time
-from typing import List
-
-from bs4 import BeautifulSoup
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-
-from utils.selenium_driver import create_driver
+from utils.selenium_driver import get_selenium_driver
 from .base import Product
+from parser.mock_parser import parse_mock_html
 
 
+def search_dns(query: str, mode: str = "real") -> list[Product]:
+    """
+        Парсит DNS Shop через Selenium или в режиме mock.
 
-def search_dns(query: str, mode: str = "real") -> List[Product]:
-    if mode != "real":
-        raise ValueError("Только режим 'real' поддерживается для DNS")
+        Args:
+            query (str): Поисковый запрос.
+            mode (str): 'real' или 'mock'.
 
-    print("🌐 Открываем DNS...")
-    url = f"https://www.dns-shop.ru/search/?q={query}"
-    driver = create_driver()
+        Returns:
+            list[Product]: Результаты поиска.
+        """
+
+    if mode == "mock":
+        return parse_mock_html("dns", query)
 
     try:
+        driver = get_selenium_driver(site="dns")
+        url = f"https://www.dns-shop.ru/search/?q={query}"
         driver.get(url)
         time.sleep(5)
 
-        WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located((By.CLASS_NAME, "catalog-product"))
-        )
-
-        driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-        time.sleep(2)
-
-        html = driver.page_source
-        soup = BeautifulSoup(html, "html.parser")
-
-        product_cards = soup.select("div.catalog-product")
+        cards = driver.find_elements(By.CSS_SELECTOR, "div.catalog-product")
         products = []
 
-        for card in product_cards[:10]:
+        for card in cards[:10]:
             try:
-                name_tag = card.select_one("a.catalog-product__name")
-                price_tag = card.select_one("div.catalog-product__price-current")
-                link_tag = name_tag
-
-                name = name_tag.get_text(strip=True) if name_tag else "Без названия"
-                price = price_tag.get_text(strip=True).replace("\u2009", "") if price_tag else "Нет цены"
-                url = "https://www.dns-shop.ru" + link_tag["href"] if link_tag and link_tag.has_attr("href") else ""
-
-                products.append(Product(name=name, price=price, link=url, source="DNS"))
+                name = card.find_element(By.CSS_SELECTOR, "a.catalog-product__name").text
+                price_str = card.find_element(By.CSS_SELECTOR, "span.product-buy__price").text
+                price = int(price_str.replace("₽", "").replace(" ", ""))
+                url = card.find_element(By.CSS_SELECTOR, "a.catalog-product__name").get_attribute("href")
+                products.append(Product(name=name, price=price, url=url))
             except Exception:
                 continue
 
-        print(f"📦 DNS: найдено {len(products)}")
-        return products
-
-    except Exception as e:
-        print("❌ DNS: ошибка —", e)
-        return []
-
-    finally:
         driver.quit()
-
-
+        return products or parse_mock_html("dns", query)
+    except Exception:
+        return parse_mock_html("dns", query)

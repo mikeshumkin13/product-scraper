@@ -1,75 +1,47 @@
 import time
-from typing import List
-
-from bs4 import BeautifulSoup
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-
-from utils.selenium_driver import create_driver
+from utils.selenium_driver import get_selenium_driver
 from .base import Product
+from parser.mock_parser import parse_mock_html
 
 
+def search_ozon(query: str, mode: str = "real") -> list[Product]:
+    """
+        Парсит Ozon с помощью Selenium или через mock-файл.
 
-def search_ozon(query: str, mode: str = "real") -> List[Product]:
-    if mode != "real":
-        raise ValueError("Только режим 'real' поддерживается для Ozon")
+        Args:
+            query (str): Название товара.
+            mode (str): Режим парсинга: 'real' или 'mock'.
 
-    print("🌐 Открываем Ozon...")
-    url = f"https://www.ozon.ru/search/?text={query}"
-    driver = create_driver()
+        Returns:
+            list[Product]: Список товаров.
+        """
+
+    if mode == "mock":
+        return parse_mock_html("ozon", query)
 
     try:
+        driver = get_selenium_driver(site="ozon")
+        url = f"https://www.ozon.ru/search/?text={query}"
         driver.get(url)
         time.sleep(5)
 
-        # Обход защиты: кнопка "Обновить"
-        try:
-            reload_btn = WebDriverWait(driver, 3).until(
-                EC.element_to_be_clickable((By.ID, "reload-button"))
-            )
-            print("🔁 Обнаружена защита. Кликаем 'Обновить'...")
-            reload_btn.click()
-            time.sleep(5)
-        except Exception:
-            pass
-
-        # Ждём появления результатов
-        WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located((By.CSS_SELECTOR, "div[data-widget='searchResultsV2']"))
-        )
-
-        driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-        time.sleep(2)
-
-        html = driver.page_source
-        soup = BeautifulSoup(html, "html.parser")
-
-        product_cards = soup.select("div[data-widget='searchResultsV2'] article")
+        cards = driver.find_elements(By.CSS_SELECTOR, "div[data-widget='searchResultsV2'] article")
         products = []
 
-        for card in product_cards[:10]:
+        for card in cards[:10]:
             try:
-                name_tag = card.select_one("span")
-                price_tag = card.select_one("span[class*=price]")
-                link_tag = card.select_one("a")
-
-                name = name_tag.get_text(strip=True) if name_tag else "Без названия"
-                price = price_tag.get_text(strip=True).replace("\u2009", "") if price_tag else "Нет цены"
-                url = "https://www.ozon.ru" + link_tag["href"] if link_tag and link_tag.has_attr("href") else ""
-
-                products.append(Product(name=name, price=price, link=url, source="Ozon"))
+                name = card.find_element(By.CSS_SELECTOR, "a span").text
+                price_tag = card.find_element(By.CSS_SELECTOR, "span[style*='color:black']")
+                price = int(price_tag.text.replace("₽", "").replace(" ", ""))
+                url = card.find_element(By.CSS_SELECTOR, "a").get_attribute("href")
+                products.append(Product(name=name, price=price, url=url))
             except Exception:
                 continue
 
-        print(f"📦 Ozon: найдено {len(products)}")
-        return products
-
-    except Exception as e:
-        print("❌ Ozon: ошибка —", e)
-        return []
-
-    finally:
         driver.quit()
+        return products or parse_mock_html("ozon", query)
+    except Exception:
+        return parse_mock_html("ozon", query)
 
 
