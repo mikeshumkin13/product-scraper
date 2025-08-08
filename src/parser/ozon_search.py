@@ -7,21 +7,20 @@ from parser.mock_parser import parse_mock_html
 
 def search_ozon(query: str, mode: str = "real") -> list[Product]:
     """
-        Парсит Ozon с помощью Selenium или через mock-файл.
+    Парсит Ozon через Selenium или mock-данные.
 
-        Args:
-            query (str): Название товара.
-            mode (str): Режим парсинга: 'real' или 'mock'.
+    Args:
+        query (str): Название товара.
+        mode (str): Режим: 'real' или 'mock'.
 
-        Returns:
-            list[Product]: Список товаров.
-        """
-
+    Returns:
+        list[Product]: Найденные товары.
+    """
     if mode == "mock":
         return parse_mock_html("ozon", query)
 
     try:
-        driver = get_selenium_driver(site="ozon")
+        driver = get_selenium_driver(site="ozon", use_cookies=True)
         url = f"https://www.ozon.ru/search/?text={query}"
         driver.get(url)
         time.sleep(5)
@@ -41,7 +40,10 @@ def search_ozon(query: str, mode: str = "real") -> list[Product]:
 
         driver.quit()
         return products or parse_mock_html("ozon", query)
-    except Exception:
+    except Exception as e:
+        if 'driver' in locals():
+            driver.save_screenshot("ozon_debug.png")
+            with open("ozon_debug.html", "w", encoding="utf-8") as f:
+                f.write(driver.page_source)
+            driver.quit()
         return parse_mock_html("ozon", query)
-
-

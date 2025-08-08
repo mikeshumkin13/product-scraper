@@ -7,21 +7,20 @@ from parser.mock_parser import parse_mock_html
 
 def search_dns(query: str, mode: str = "real") -> list[Product]:
     """
-        Парсит DNS Shop через Selenium или в режиме mock.
+    Парсит сайт DNS Shop через Selenium или через mock-данные.
 
-        Args:
-            query (str): Поисковый запрос.
-            mode (str): 'real' или 'mock'.
+    Args:
+        query (str): Поисковый запрос.
+        mode (str): 'real' или 'mock'.
 
-        Returns:
-            list[Product]: Результаты поиска.
-        """
-
+    Returns:
+        list[Product]: Список найденных товаров.
+    """
     if mode == "mock":
         return parse_mock_html("dns", query)
 
     try:
-        driver = get_selenium_driver(site="dns")
+        driver = get_selenium_driver(site="dns", use_cookies=True)
         url = f"https://www.dns-shop.ru/search/?q={query}"
         driver.get(url)
         time.sleep(5)
@@ -41,5 +40,12 @@ def search_dns(query: str, mode: str = "real") -> list[Product]:
 
         driver.quit()
         return products or parse_mock_html("dns", query)
-    except Exception:
+    except Exception as e:
+        if 'driver' in locals():
+            driver.save_screenshot("dns_debug.png")
+            with open("dns_debug.html", "w", encoding="utf-8") as f:
+                f.write(driver.page_source)
+            driver.quit()
         return parse_mock_html("dns", query)
+
+
