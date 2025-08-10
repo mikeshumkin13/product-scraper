@@ -1,79 +1,112 @@
-from typing import List
+from __future__ import annotations
+from typing import List, Iterable, Any
 import re
-from bs4 import BeautifulSoup
-from parser.base import Product
 import json
-from pathlib import Path
+from bs4 import BeautifulSoup
+from .base import Product
 
+def _to_products(items: Iterable[Any], query: str) -> List[Product]:
+    """Унифицируем список словарей в список Product, пропуская мусор."""
+    out: List[Product] = []
+    q = query.lower()
+    for item in items:
+        if isinstance(item, dict):
+            name = str(item.get("name", "")).strip()
+            if not name:
+                continue
+            if q not in name.lower():
+                continue
+            url = str(item.get("url", "https://example.com")).strip() or "https://example.com"
+            price = item.get("price", "Нет цены")
+            out.append(Product(name=name, url=url, price=price))
+        # если внезапно пришла строка — пропускаем
+    return out
 
-
-def parse_mock_html(site: str, query: str) -> List[Product]:
+def parse_mock_json(json_data: Any, query: str) -> List[Product]:
     """
-    Парсит HTML-файл с мок-данными для указанного сайта и фильтрует товары по запросу.
-
-    :param site: Название сайта (dns, citilink, ozon)
-    :param query: Поисковый запрос
-    :return: Список продуктов
+    Принимает либо: str (JSON-текст), либо уже распарсенный объект (list/ dict).
+    Возвращает отфильтрованный список Product.
     """
-    mock_path = Path(f"src/parser/mock/{site}_mock.html")
-    if not mock_path.exists():
-        return []
+    data: Any = json_data
+    if isinstance(json_data, str):
+        try:
+            data = json.loads(json_data)
+        except Exception:
+            return []
 
-    with open(mock_path, encoding="utf-8") as f:
-        html = f.read()
+    if isinstance(data, dict):
+        # допускаем формат {"items":[...]}
+        if "items" in data and isinstance(data["items"], list):
+            return _to_products(data["items"], query)
+        # или одна карточка
+        return _to_products([data], query)
 
+    if isinstance(data, list):
+        return _to_products(data, query)
+
+    return []
+
+def parse_mock_html(html: str, query: str) -> List[Product]:
+    """
+    «Грязный» HTML-парсер для моков разных сайтов.
+    Ищет карточки по набору распространённых классов.
+    """
     soup = BeautifulSoup(html, "html.parser")
-    query_lower = query.lower()
-    products = []
+    q = query.lower()
+    products: List[Product] = []
 
-    if site == "dns":
-        cards = soup.select("div.product-info")
-        for card in cards:
-            name_tag = card.select_one("a.product-name")
-            price_tag = card.select_one("span.product-price")
-            if name_tag and price_tag and query_lower in name_tag.text.lower():
-                url = "https://dns-shop.ru" + name_tag["href"]
-                price = int(price_tag.text.replace("₽", "").replace(" ", ""))
-                products.append(Product(name=name_tag.text.strip(), url=url, price=price))
+    # Набор шаблонов для названия и цены
+    name_selectors = [
+        "a.product-name", "a.catalog-product__name", "a.ProductCardVertical__name",
+        "div.tile-hover-target a", "a", "div.product-title a", "a.product-card__name",
+    ]
+    price_selectors = [
+        "span.product-price", "span.product-buy__price",
+        "span.ProductCardVerticalPrice__price-current",
+        "div.ui-pdp-price__content span", "ins.price__lower-price", "span.price, span.price__lower-price"
+    ]
 
-    elif site == "citilink":
-        names = soup.select("div.ProductCardHorizontal__header > a")
-        prices = soup.select("div.ProductCardHorizontal__price_current-price")
-        for name_tag, price_tag in zip(names, prices):
-            if query_lower in name_tag.text.lower():
-                url = "https://citilink.ru" + name_tag["href"]
-                price = int(price_tag.text.replace("₽", "").replace(" ", ""))
-                products.append(Product(name=name_tag.text.strip(), url=url, price=price))
+    # Контейнеры карточек
+    card_candidates = soup.select(
+        "div.product-info, div.catalog-product, div.ProductCardVertical, "
+        "article, div.product-card, div.tile-hover-target, div.ProductCardHorizontal__header"
+    )
+    if not card_candidates:
+        card_candidates = soup.select("div, article")
 
-    elif site == "ozon":
-        names = soup.select("div.tile-hover-target > a")
-        prices = soup.select("div.ui-pdp-price__content > span")
-        for name_tag, price_tag in zip(names, prices):
-            if query_lower in name_tag.text.lower():
-                url = "https://ozon.ru" + name_tag["href"]
-                price = int(price_tag.text.replace("₽", "").replace(" ", ""))
-                products.append(Product(name=name_tag.text.strip(), url=url, price=price))
+    for node in card_candidates:
+        name = None
+        href = None
+        for sel in name_selectors:
+            el = node.select_one(sel)
+            if el and el.get_text(strip=True):
+                name = el.get_text(strip=True)
+                href = el.get("href")
+                break
+
+        price_text = None
+        for sel in price_selectors:
+            el = node.select_one(sel)
+            if el and el.get_text(strip=True):
+                price_text = el.get_text(strip=True)
+                break
+
+        if not name or not price_text:
+            continue
+
+        if q not in name.lower():
+            continue
+
+        url = href or "#"
+        if not url.startswith("http"):
+            url = "https://example.com" + url
+
+        # очистка цены
+        digits = re.sub(r"[^\d]", "", price_text)
+        price: int | str = int(digits) if digits.isdigit() else price_text
+
+        products.append(Product(name=name, url=url, price=price))
 
     return products
 
-
-def parse_mock_json(data: List[dict], query: str) -> List[Product]:
-    """
-    Парсит JSON-данные (список словарей) и фильтрует товары по запросу.
-
-    :param data: Список словарей с товарами
-    :param query: Поисковый запрос
-    :return: Список объектов Product
-    """
-    query_lower = query.lower()
-    products = []
-
-    for item in data:
-        name = item.get("name", "")
-        if query_lower in name.lower():
-            url = item.get("url", "https://example.com")
-            price = item.get("price", 0)
-            products.append(Product(name=name, url=url, price=price))
-
-    return products
 
