@@ -43,5 +43,9 @@ exported_data/
 .mypy_cache/
 .cache/
 
+Local browser profiles / debug
+  src/auth/*_profile/
+   chrome_debug.log
+   DevToolsActivePort
 
 
