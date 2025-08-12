@@ -1,37 +1,45 @@
 import csv
-from parser.base import Product
-from dataclasses import is_dataclass, asdict
+from typing import Any, Dict, Iterable
+
+try:
+    # опционально: если Product есть, хорошо; если нет — не критично
+    from parser.base import Product  # type: ignore
+except Exception:
+    Product = object  # fall back
 
 
-def export_to_csv(data: list, filename: str) -> None:
-    """
-    Экспорт списка товаров в CSV.
-    Поддерживает как dataclass Product, так и обычные dict.
-    """
+def _to_row(obj: Any) -> Dict[str, Any]:
+    """Приводим любой объект к dict для csv."""
+    if isinstance(obj, dict):
+        return dict(obj)
+    # dataclass/обычный объект
+    if hasattr(obj, "__dict__"):
+        return {k: v for k, v in vars(obj).items() if not k.startswith("_")}
+    # последний шанс — строка в name
+    return {"name": str(obj)}
+
+def _build_fieldnames(rows: Iterable[Dict[str, Any]]) -> list[str]:
+    base_order = ["name", "price", "currency", "url", "image"]
+    all_keys: set[str] = set()
+    for r in rows:
+        all_keys.update(r.keys())
+    fieldnames: list[str] = [k for k in base_order if k in all_keys]
+    rest = sorted(all_keys - set(fieldnames))
+    fieldnames.extend(rest)
+    return fieldnames
+
+def export_to_csv(data: list[Any], filename: str) -> None:
     if not data:
         print("⚠️ Нет данных для экспорта.")
         return
 
-    # Определяем поля по первому элементу
-    first_item = data[0]
-    if is_dataclass(first_item):
-        fieldnames = list(asdict(first_item).keys())
-    elif isinstance(first_item, dict):
-        fieldnames = list(first_item.keys())
-    else:
-        fieldnames = ["name", "price", "url"]
+    # нормализуем все элементы к словарям
+    rows = [_to_row(p) for p in data]
+    fieldnames = _build_fieldnames(rows)
 
-    with open(filename, mode="w", newline="", encoding="utf-8") as file:
-        writer = csv.DictWriter(file, fieldnames=fieldnames)
+    with open(filename, "w", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=fieldnames)
         writer.writeheader()
-        for product in data:
-            if is_dataclass(product):
-                writer.writerow(asdict(product))
-            elif isinstance(product, dict):
-                writer.writerow(product)
-            else:
-                writer.writerow(
-                    {field: getattr(product, field, "") for field in fieldnames}
-                )
-
+        for row in rows:
+            writer.writerow(row)
 
