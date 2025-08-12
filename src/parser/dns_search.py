@@ -7,7 +7,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
 from utils.selenium_driver import get_selenium_driver
-from utils.selenium_helpers import load_site_cookies, human_sleep
+from utils.helpers import load_site_cookies, human_sleep
 from .base import Product
 from .mock_parser import parse_mock_html
 
@@ -26,7 +26,9 @@ def _dismiss_dns_modals(driver):
     ]
     for sel in candidates:
         try:
-            el = WebDriverWait(driver, 3).until(EC.element_to_be_clickable((By.CSS_SELECTOR, sel)))
+            el = WebDriverWait(driver, 3).until(
+                EC.element_to_be_clickable((By.CSS_SELECTOR, sel))
+            )
             el.click()
             human_sleep(True, 0.2, 0.6)
         except Exception:
@@ -36,7 +38,11 @@ def _dismiss_dns_modals(driver):
 def _wait_dns_cards(driver, timeout=30):
     wait = WebDriverWait(driver, timeout)
     # ждём контейнер результатов
-    wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "div.catalog-products, div.products-page")))
+    wait.until(
+        EC.presence_of_element_located(
+            (By.CSS_SELECTOR, "div.catalog-products, div.products-page")
+        )
+    )
     # несколько вариантов карточек
     for by, sel in [
         (By.CSS_SELECTOR, "div.catalog-product"),
@@ -62,7 +68,9 @@ def search_dns(
 
     driver = None
     try:
-        driver = get_selenium_driver(site="dns", use_profile=use_profile, profile_dir=profile_dir)
+        driver = get_selenium_driver(
+            site="dns", use_profile=use_profile, profile_dir=profile_dir
+        )
         load_site_cookies(driver, "dns", DNS_HOME)
         human_sleep(slow)
 
@@ -74,7 +82,11 @@ def search_dns(
         # Поле поиска
         wait = WebDriverWait(driver, 25)
         search = None
-        for sel in ["input[placeholder*='Поиск']", "input#search-input", "input[type='search']"]:
+        for sel in [
+            "input[placeholder*='Поиск']",
+            "input#search-input",
+            "input[type='search']",
+        ]:
             try:
                 search = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, sel)))
                 break
@@ -117,7 +129,11 @@ def search_dns(
 
                 # цена
                 price_text = ""
-                for sel in ["div.product-buy__price", "div.price__current", "span.price"]:
+                for sel in [
+                    "div.product-buy__price",
+                    "div.price__current",
+                    "span.price",
+                ]:
                     try:
                         price_text = card.find_element(By.CSS_SELECTOR, sel).text
                         if price_text:
@@ -128,7 +144,9 @@ def search_dns(
                 price = int(digits) if digits else "Нет цены"
 
                 if url:
-                    products.append(Product(name=name or "Товар DNS", price=price, url=url))
+                    products.append(
+                        Product(name=name or "Товар DNS", price=price, url=url)
+                    )
             except Exception:
                 continue
 
@@ -157,5 +175,3 @@ def search_dns(
 def _fb(site: str, query: str, reason: str):
     print(f"🔁 {site.upper()}: фолбэк на mock ({reason})")
     return parse_mock_html(site, query)
-
-

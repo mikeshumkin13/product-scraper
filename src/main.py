@@ -24,7 +24,9 @@ def build_cli() -> argparse.ArgumentParser:
     - --profile: использовать реальный профиль Chrome (UDC + user-data-dir).
     - --profile-dir: путь к каталогу профиля Chrome (если не указан — системный Default на macOS).
     """
-    parser = argparse.ArgumentParser(description="🛍 Product Scraper (UDC + cookies + profile)")
+    parser = argparse.ArgumentParser(
+        description="🛍 Product Scraper (UDC + cookies + profile)"
+    )
 
     parser.add_argument(
         "--mode",
@@ -169,5 +171,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-
-

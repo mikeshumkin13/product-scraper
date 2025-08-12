@@ -18,7 +18,10 @@ DEFAULT_USER_AGENT = (
     "Chrome/139.0.0.0 Safari/537.36"
 )
 
-def _apply_profile_chrome(options: uc.ChromeOptions, use_profile: bool, profile_dir: Optional[str]) -> None:
+
+def _apply_profile_chrome(
+    options: uc.ChromeOptions, use_profile: bool, profile_dir: Optional[str]
+) -> None:
     if not use_profile:
         return
     if not profile_dir:
@@ -27,6 +30,7 @@ def _apply_profile_chrome(options: uc.ChromeOptions, use_profile: bool, profile_
     default_profile = Path(profile_dir) / "Default"
     if default_profile.is_dir():
         options.add_argument("--profile-directory=Default")
+
 
 def _make_chrome(headless: bool, use_profile: bool, profile_dir: Optional[str]):
     options = uc.ChromeOptions()
@@ -46,7 +50,10 @@ def _make_chrome(headless: bool, use_profile: bool, profile_dir: Optional[str]):
     # у UDC Safari-style аргументы типа excludeSwitches/useAutomationExtension добавлять НЕ нужно
     return uc.Chrome(options=options, headless=headless)
 
-def _apply_profile_firefox(opts: FirefoxOptions, use_profile: bool, profile_dir: Optional[str]) -> None:
+
+def _apply_profile_firefox(
+    opts: FirefoxOptions, use_profile: bool, profile_dir: Optional[str]
+) -> None:
     if not use_profile:
         return
     # Firefox ждёт ПАПКУ ПРОФИЛЯ, а не корень каталога
@@ -61,6 +68,7 @@ def _apply_profile_firefox(opts: FirefoxOptions, use_profile: bool, profile_dir:
             # дадим Firefox создать временный профиль — просто выходим
             return
     opts.set_preference("profile", profile_dir)
+
 
 def _make_firefox(headless: bool, use_profile: bool, profile_dir: Optional[str]):
     opts = FirefoxOptions()
@@ -80,13 +88,14 @@ def _make_firefox(headless: bool, use_profile: bool, profile_dir: Optional[str])
     driver.set_window_size(1280, 900)
     return driver
 
+
 def get_selenium_driver(
     site: str = "",
     *,
     headless: bool = False,
     use_profile: bool = False,
     profile_dir: Optional[str] = None,
-    browser: Optional[str] = None,   # "chrome" | "firefox" | None
+    browser: Optional[str] = None,  # "chrome" | "firefox" | None
 ):
     """
     Унифицированный конструктор Selenium‑драйвера.
@@ -97,8 +106,10 @@ def get_selenium_driver(
     """
     choice = (browser or os.getenv("PS_BROWSER") or "chrome").lower()
     if choice == "firefox":
-        return _make_firefox(headless=headless, use_profile=use_profile, profile_dir=profile_dir)
+        return _make_firefox(
+            headless=headless, use_profile=use_profile, profile_dir=profile_dir
+        )
     # по умолчанию — Chrome через UDC
-    return _make_chrome(headless=headless, use_profile=use_profile, profile_dir=profile_dir)
-
-
+    return _make_chrome(
+        headless=headless, use_profile=use_profile, profile_dir=profile_dir
+    )

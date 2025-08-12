@@ -5,6 +5,7 @@ import json
 from bs4 import BeautifulSoup
 from .base import Product
 
+
 def _to_products(items: Iterable[Any], query: str) -> List[Product]:
     """Унифицируем список словарей в список Product, пропуская мусор."""
     out: List[Product] = []
@@ -16,11 +17,15 @@ def _to_products(items: Iterable[Any], query: str) -> List[Product]:
                 continue
             if q not in name.lower():
                 continue
-            url = str(item.get("url", "https://example.com")).strip() or "https://example.com"
+            url = (
+                str(item.get("url", "https://example.com")).strip()
+                or "https://example.com"
+            )
             price = item.get("price", "Нет цены")
             out.append(Product(name=name, url=url, price=price))
         # если внезапно пришла строка — пропускаем
     return out
+
 
 def parse_mock_json(json_data: Any, query: str) -> List[Product]:
     """
@@ -46,6 +51,7 @@ def parse_mock_json(json_data: Any, query: str) -> List[Product]:
 
     return []
 
+
 def parse_mock_html(html: str, query: str) -> List[Product]:
     """
     «Грязный» HTML-парсер для моков разных сайтов.
@@ -57,13 +63,21 @@ def parse_mock_html(html: str, query: str) -> List[Product]:
 
     # Набор шаблонов для названия и цены
     name_selectors = [
-        "a.product-name", "a.catalog-product__name", "a.ProductCardVertical__name",
-        "div.tile-hover-target a", "a", "div.product-title a", "a.product-card__name",
+        "a.product-name",
+        "a.catalog-product__name",
+        "a.ProductCardVertical__name",
+        "div.tile-hover-target a",
+        "a",
+        "div.product-title a",
+        "a.product-card__name",
     ]
     price_selectors = [
-        "span.product-price", "span.product-buy__price",
+        "span.product-price",
+        "span.product-buy__price",
         "span.ProductCardVerticalPrice__price-current",
-        "div.ui-pdp-price__content span", "ins.price__lower-price", "span.price, span.price__lower-price"
+        "div.ui-pdp-price__content span",
+        "ins.price__lower-price",
+        "span.price, span.price__lower-price",
     ]
 
     # Контейнеры карточек
@@ -108,5 +122,3 @@ def parse_mock_html(html: str, query: str) -> List[Product]:
         products.append(Product(name=name, url=url, price=price))
 
     return products
-
-

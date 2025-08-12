@@ -29,14 +29,16 @@ sites = {
     "wildberries": {
         "url": "https://www.wildberries.ru/",
         "file": "wildberries_cookies.json",
-    }
+    },
 }
 
 
 def save_cookies(site: str, url: str, file: str):
     print(f"\n🚀 Откроется браузер для авторизации на {url}")
     print("👉 Войди вручную в аккаунт. После входа не закрывай вкладку!")
-    print("⏳ После входа — подожди пару секунд и нажми Enter в терминале для сохранения cookies.")
+    print(
+        "⏳ После входа — подожди пару секунд и нажми Enter в терминале для сохранения cookies."
+    )
 
     options = Options()
     options.add_argument(f"--user-data-dir={PROFILE_DIR}")
@@ -66,11 +68,15 @@ if __name__ == "__main__":
     print("📋 Доступные сайты:")
     for s in sites:
         print(f"- {s}")
-    selected = input("🔎 Введи название сайта (ozon / dns / citilink / wildberries): ").strip().lower()
+    selected = (
+        input("🔎 Введи название сайта (ozon / dns / citilink / wildberries): ")
+        .strip()
+        .lower()
+    )
 
     if selected in sites:
-        save_cookies(site=selected, url=sites[selected]["url"], file=sites[selected]["file"])
+        save_cookies(
+            site=selected, url=sites[selected]["url"], file=sites[selected]["file"]
+        )
     else:
         print("❌ Неверный сайт.")
-
-

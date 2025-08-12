@@ -9,7 +9,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
 from utils.selenium_driver import get_selenium_driver
-from utils.selenium_helpers import load_site_cookies, human_sleep
+from utils.helpers import load_site_cookies, human_sleep
 from .base import Product
 from .mock_parser import parse_mock_json
 
@@ -42,7 +42,9 @@ def search_wildberries(
 
     driver = None
     try:
-        driver = get_selenium_driver(site="wildberries", use_profile=use_profile, profile_dir=profile_dir)
+        driver = get_selenium_driver(
+            site="wildberries", use_profile=use_profile, profile_dir=profile_dir
+        )
         load_site_cookies(driver, "wildberries", base)
         human_sleep(slow)
 
@@ -51,9 +53,14 @@ def search_wildberries(
 
         # ждём, пока появится контейнер с карточками (Wildberries часто меняет разметку)
         wait = WebDriverWait(driver, 20)
-        wait.until(EC.presence_of_element_located((
-            By.CSS_SELECTOR, "div[data-catalog-content] article, article.product-card, div.product-card"
-        )))
+        wait.until(
+            EC.presence_of_element_located(
+                (
+                    By.CSS_SELECTOR,
+                    "div[data-catalog-content] article, article.product-card, div.product-card",
+                )
+            )
+        )
 
         # сохраняем html для отладки
         Path("tests/wb_real.html").write_text(driver.page_source, encoding="utf-8")
@@ -62,9 +69,9 @@ def search_wildberries(
 
         # несколько вариантов карточек (страницы WB бывают разными)
         cards = (
-            soup.select("div[data-catalog-content] article") or
-            soup.select("article.product-card") or
-            soup.select("div.product-card")
+            soup.select("div[data-catalog-content] article")
+            or soup.select("article.product-card")
+            or soup.select("div.product-card")
         )
 
         products: List[Product] = []
@@ -72,14 +79,17 @@ def search_wildberries(
             try:
                 # имя
                 name_tag = (
-                    card.select_one("span.goods-name") or
-                    card.select_one("[data-link*='name']") or
-                    card.select_one("a[aria-label]")
+                    card.select_one("span.goods-name")
+                    or card.select_one("[data-link*='name']")
+                    or card.select_one("a[aria-label]")
                 )
                 if not name_tag:
                     continue
-                name = (name_tag.get_text(strip=True) if name_tag.name != "a"
-                        else (name_tag.get("aria-label") or name_tag.get_text(strip=True)))
+                name = (
+                    name_tag.get_text(strip=True)
+                    if name_tag.name != "a"
+                    else (name_tag.get("aria-label") or name_tag.get_text(strip=True))
+                )
                 if not name:
                     continue
 
@@ -91,10 +101,10 @@ def search_wildberries(
 
                 # цена (пробуем несколько селекторов)
                 price_el = (
-                    card.select_one("ins.price__lower-price") or
-                    card.select_one("span.lower-price") or
-                    card.select_one("span.price") or
-                    card.select_one("p.price")
+                    card.select_one("ins.price__lower-price")
+                    or card.select_one("span.lower-price")
+                    or card.select_one("span.price")
+                    or card.select_one("p.price")
                 )
                 price_text = price_el.get_text(strip=True) if price_el else ""
                 digits = "".join(ch for ch in price_text if ch.isdigit())
@@ -139,5 +149,3 @@ def _parse_mock(query: str) -> List[Product]:
 def _fb(query: str, reason: str) -> List[Product]:
     print(f"🔁 WILDBERRIES: фолбэк на mock ({reason})")
     return _parse_mock(query)
-
-
