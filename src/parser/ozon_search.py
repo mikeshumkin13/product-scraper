@@ -116,7 +116,7 @@ def search_ozon(
         html = Path("src/parser/mock/ozon_mock.html").read_text(encoding="utf-8")
         soup = BeautifulSoup(html, "html.parser")
         hrefs = [BASE + a["href"] for a in soup.select("a[href^='/product/']")]
-        hrefs = _dedupe_keep_order(hrefs)[:40]
+        hrefs = _dedupe_keep_order(hrefs)[:10]
         return [{"name": "MOCK item", "price": None, "currency": None, "url": h, "image": None} for h in hrefs]
 
     driver = get_selenium_driver(
@@ -146,7 +146,7 @@ def search_ozon(
             _scroll(driver, steps=30, slow=slow)
             hrefs = _collect_product_hrefs(driver, slow=slow)
 
-        hrefs = _dedupe_keep_order(hrefs)[:40]
+        hrefs = _dedupe_keep_order(hrefs)[:10]
         if not hrefs:
             return []
 
