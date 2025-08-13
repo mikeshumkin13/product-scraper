@@ -16,6 +16,8 @@ undetected-chromedriver = "^3.5.5"
 setuptools = "^80.9.0"
 curl-cffi = "^0.13.0"
 selenium-stealth = "^1.0.6"
+python-telegram-bot = ">=21.6,<22.0"
+python-dotenv = ">=1.0,<2.0"
 
 
 [tool.poetry.group.dev.dependencies]
