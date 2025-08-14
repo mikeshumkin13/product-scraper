@@ -1,0 +1,41 @@
+[
+  {
+    "domain": ".ozon.ru",
+    "expiry": 1786186128,
+    "httpOnly": true,
+    "name": "abt_data",
+    "path": "/",
+    "sameSite": "None",
+    "secure": true,
+    "value": "7.cwsi8UF-nVeu4spXqs_GuQgo3ciURd7FL9uJc-AWQRfnjjWtT6xJcrdslfBtApu6NUu0Ucqa-vzBHGoCFeFju-rYuXQeJafCi20iG8LbhqYrEWDBLYuiFC805GEAoRK-H0sXcjNUoDa3dlrQqo3voq71h_b45bd1EVvvld1f7KqBIWSxGp0WyimPbxtiaR2HmLA38XS2qEYhbYwJxuzmqbmiAMaYjEk25g0fuiwjed2YkGGwy3DfAvw5bNN8iuU9-IO3U3UO1ebad9IeLU0Mp7sHHHoTyC4VDLzQa_dLS1rHE2UyaCEGGHKU-fuUOTis9LNbwnGXQQdT0OLrTp-gZFbMJniWimJfOf3IgaCBSBuZBHlCF4gq1WvcXyhInUnMJjc9nVHlO84V8bTsEeffNhI"
+  },
+  {
+    "domain": ".ozon.ru",
+    "expiry": 1786186126,
+    "httpOnly": true,
+    "name": "__Secure-ext_xcid",
+    "path": "/",
+    "sameSite": "None",
+    "secure": true,
+    "value": "1dd3ff4c1f249935028c8c9211f18368"
+  },
+  {
+    "domain": ".ozon.ru",
+    "httpOnly": false,
+    "name": "xcid",
+    "path": "/",
+    "sameSite": "Lax",
+    "secure": false,
+    "value": "1dd3ff4c1f249935028c8c9211f18368"
+  },
+  {
+    "domain": ".ozon.ru",
+    "expiry": 1786186125,
+    "httpOnly": true,
+    "name": "__Secure-ETC",
+    "path": "/",
+    "sameSite": "None",
+    "secure": true,
+    "value": "1b0bf9f16bb89d28f972f6d6bb2cd9ff"
+  }
+]

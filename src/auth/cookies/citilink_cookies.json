@@ -1,0 +1,252 @@
+[
+  {
+    "domain": "www.citilink.ru",
+    "expiry": 1754747573,
+    "httpOnly": false,
+    "name": "tmr_detect",
+    "path": "/",
+    "sameSite": "Lax",
+    "secure": false,
+    "value": "0%7C1754661173170"
+  },
+  {
+    "domain": "www.citilink.ru",
+    "expiry": 1789221171,
+    "httpOnly": false,
+    "name": "_sp_id.faaa",
+    "path": "/",
+    "sameSite": "None",
+    "secure": true,
+    "value": "d4830b02-da40-41c8-8454-460c37385892.1754661138.1.1754661171..6923b8ca-c7a3-46f7-b874-70f2920acbd9..6ee92208-e735-4c36-8509-341fde88b638.1754661138019.30"
+  },
+  {
+    "domain": "www.citilink.ru",
+    "expiry": 1755265940,
+    "httpOnly": false,
+    "name": "domain_sid",
+    "path": "/",
+    "sameSite": "Lax",
+    "secure": false,
+    "value": "Xf7LeWQ2rEJZtzhir42sZ%3A1754661140247"
+  },
+  {
+    "domain": ".citilink.ru",
+    "expiry": 1783432367,
+    "httpOnly": false,
+    "name": "tmr_lvid",
+    "path": "/",
+    "sameSite": "Lax",
+    "secure": false,
+    "value": "69c74f575f60372dc0a0c23a41268948"
+  },
+  {
+    "domain": ".citilink.ru",
+    "expiry": 1789221138,
+    "httpOnly": false,
+    "name": "acs_3",
+    "path": "/",
+    "sameSite": "None",
+    "secure": true,
+    "value": "%7B%22hash%22%3A%221aa3f9523ee6c2690cb34fc702d4143056487c0d%22%2C%22nst%22%3A1754747538866%2C%22sl%22%3A%7B%22224%22%3A1754661138866%2C%221228%22%3A1754661138866%7D%7D"
+  },
+  {
+    "domain": ".www.citilink.ru",
+    "expiry": 1789221138,
+    "httpOnly": false,
+    "name": "acs_3",
+    "path": "/",
+    "sameSite": "None",
+    "secure": true,
+    "value": "%7B%22hash%22%3A%221aa3f9523ee6c2690cb34fc702d4143056487c0d%22%2C%22nst%22%3A1754747538866%2C%22sl%22%3A%7B%22224%22%3A1754661138866%2C%221228%22%3A1754661138866%7D%7D"
+  },
+  {
+    "domain": ".www.citilink.ru",
+    "expiry": 1789221138,
+    "httpOnly": false,
+    "name": "adrdel",
+    "path": "/",
+    "sameSite": "None",
+    "secure": true,
+    "value": "1754661138858"
+  },
+  {
+    "domain": ".citilink.ru",
+    "expiry": 1786197165,
+    "httpOnly": true,
+    "name": "suid",
+    "path": "/",
+    "sameSite": "Lax",
+    "secure": false,
+    "value": "IL12431136"
+  },
+  {
+    "domain": "www.citilink.ru",
+    "expiry": 1783432338,
+    "httpOnly": false,
+    "name": "flocktory-uuid",
+    "path": "/",
+    "sameSite": "Lax",
+    "secure": false,
+    "value": "58ac0d24-7f95-421a-94f3-5972d5717ad8-8"
+  },
+  {
+    "domain": ".citilink.ru",
+    "expiry": 1789221167,
+    "httpOnly": false,
+    "name": "adrcid",
+    "path": "/",
+    "sameSite": "None",
+    "secure": true,
+    "value": "AO73FBz3crDofboA95YFytA"
+  },
+  {
+    "domain": ".citilink.ru",
+    "expiry": 1789221138,
+    "httpOnly": false,
+    "name": "adrdel",
+    "path": "/",
+    "sameSite": "None",
+    "secure": true,
+    "value": "1754661138858"
+  },
+  {
+    "domain": "www.citilink.ru",
+    "expiry": 1754662971,
+    "httpOnly": false,
+    "name": "_sp_ses.faaa",
+    "path": "/",
+    "sameSite": "None",
+    "secure": true,
+    "value": "*"
+  },
+  {
+    "domain": ".citilink.ru",
+    "expiry": 1757253137,
+    "httpOnly": false,
+    "name": "advcake_track_id",
+    "path": "/",
+    "sameSite": "None",
+    "secure": true,
+    "value": "7c73e07c-8615-3b6c-91c5-18022f5ce52c"
+  },
+  {
+    "domain": ".citilink.ru",
+    "expiry": 1754733138,
+    "httpOnly": false,
+    "name": "_ym_isad",
+    "path": "/",
+    "sameSite": "None",
+    "secure": true,
+    "value": "2"
+  },
+  {
+    "domain": ".citilink.ru",
+    "expiry": 1783432367,
+    "httpOnly": false,
+    "name": "tmr_lvidTS",
+    "path": "/",
+    "sameSite": "Lax",
+    "secure": false,
+    "value": "1754661137500"
+  },
+  {
+    "domain": ".citilink.ru",
+    "expiry": 1786197137,
+    "httpOnly": false,
+    "name": "_ym_d",
+    "path": "/",
+    "sameSite": "None",
+    "secure": true,
+    "value": "1754661137"
+  },
+  {
+    "domain": ".www.citilink.ru",
+    "expiry": 1789221167,
+    "httpOnly": false,
+    "name": "adrcid",
+    "path": "/",
+    "sameSite": "None",
+    "secure": true,
+    "value": "AO73FBz3crDofboA95YFytA"
+  },
+  {
+    "domain": ".citilink.ru",
+    "expiry": 1786197137,
+    "httpOnly": false,
+    "name": "_ym_uid",
+    "path": "/",
+    "sameSite": "None",
+    "secure": true,
+    "value": "1754661137490214923"
+  },
+  {
+    "domain": ".citilink.ru",
+    "expiry": 1786197166,
+    "httpOnly": false,
+    "name": "_tuid",
+    "path": "/",
+    "sameSite": "Lax",
+    "secure": false,
+    "value": "cf3ad5a0374b3853188f8d20b49780243945fec6"
+  },
+  {
+    "domain": ".citilink.ru",
+    "expiry": 1754664723,
+    "httpOnly": false,
+    "name": "_pcl",
+    "path": "/",
+    "sameSite": "Lax",
+    "secure": false,
+    "value": "eW5olgEFCjJqfg=="
+  },
+  {
+    "domain": ".citilink.ru",
+    "expiry": 1786197167,
+    "httpOnly": false,
+    "name": "flomni_64ff1096fa6f1948c81bc764",
+    "path": "/",
+    "sameSite": "None",
+    "secure": true,
+    "value": "{%22userHash%22:%226b293348-efef-43fa-8cc5-3adcb890b85f%22}"
+  },
+  {
+    "domain": ".citilink.ru",
+    "expiry": 1757253137,
+    "httpOnly": false,
+    "name": "advcake_session_id",
+    "path": "/",
+    "sameSite": "None",
+    "secure": true,
+    "value": "68d1db7e-f335-8934-eb7f-53579e703eb0"
+  },
+  {
+    "domain": ".citilink.ru",
+    "expiry": 1786197166,
+    "httpOnly": false,
+    "name": "_space",
+    "path": "/",
+    "sameSite": "Lax",
+    "secure": false,
+    "value": "psk_cl"
+  },
+  {
+    "domain": ".citilink.ru",
+    "expiry": 1786197165,
+    "httpOnly": true,
+    "name": "_csh",
+    "path": "/",
+    "sameSite": "Lax",
+    "secure": true,
+    "value": "be0df94e044339bb679bd8328e5851e0cf8a4d95"
+  },
+  {
+    "domain": ".citilink.ru",
+    "expiry": 1786197121,
+    "httpOnly": false,
+    "name": "ab_test_segment",
+    "path": "/",
+    "sameSite": "Lax",
+    "secure": true,
+    "value": "66"
+  }
+]

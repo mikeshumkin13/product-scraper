@@ -7,8 +7,31 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = ">=3.12,<4.0"
-requests = "^2.32.4"
+requests = {extras = ["socks"], version = "^2.32.4"}
 beautifulsoup4 = "^4.13.4"
+lxml = "^6.0.0"
+selenium = "^4.34.2"
+webdriver-manager = "^4.0.2"
+undetected-chromedriver = "^3.5.5"
+setuptools = "^80.9.0"
+curl-cffi = "^0.13.0"
+selenium-stealth = "^1.0.6"
+python-telegram-bot = ">=21.6,<22.0"
+python-dotenv = ">=1.0,<2.0"
+
+[tool.flake8]
+max-line-length = 119
+extend-ignore = [
+    "E203",  # конфликты с black по двоеточиям
+    "W503"   # переносы операторов
+]
+exclude = [
+    ".git",
+    "__pycache__",
+    "build",
+    "dist",
+    ".venv"
+]
 
 
 [tool.poetry.group.dev.dependencies]
@@ -20,3 +43,5 @@ isort = "^6.0.1"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+
