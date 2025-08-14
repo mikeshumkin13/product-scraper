@@ -11,6 +11,7 @@ from parser.ozon_search import search_ozon
 # Целевая схема CSV по договорённости проекта
 SCHEMA = ["name", "price", "currency", "url", "image"]
 
+
 def _as_dict(item):
     if isinstance(item, dict):
         return item
@@ -23,6 +24,7 @@ def _as_dict(item):
     for k in SCHEMA:
         out.setdefault(k, "")
     return out
+
 
 def test_export_csv_mock_end_to_end():
     # собираем из всех четырёх парсеров (mock), как делает main.py
@@ -48,8 +50,5 @@ def test_export_csv_mock_end_to_end():
         assert header == SCHEMA
         first = next(r, None)
         assert first is not None
-        assert first[0] != ""   # name
+        assert first[0] != ""  # name
         assert first[3].startswith("http") or first[3] == ""  # url может быть пуст
-
-
-

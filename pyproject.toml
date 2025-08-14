@@ -19,6 +19,20 @@ selenium-stealth = "^1.0.6"
 python-telegram-bot = ">=21.6,<22.0"
 python-dotenv = ">=1.0,<2.0"
 
+[tool.flake8]
+max-line-length = 119
+extend-ignore = [
+    "E203",  # конфликты с black по двоеточиям
+    "W503"   # переносы операторов
+]
+exclude = [
+    ".git",
+    "__pycache__",
+    "build",
+    "dist",
+    ".venv"
+]
+
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.4.1"
@@ -29,3 +43,5 @@ isort = "^6.0.1"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+

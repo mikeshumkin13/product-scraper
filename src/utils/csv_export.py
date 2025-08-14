@@ -18,6 +18,7 @@ def _to_row(obj: Any) -> Dict[str, Any]:
     # последний шанс — строка в name
     return {"name": str(obj)}
 
+
 def _build_fieldnames(rows: Iterable[Dict[str, Any]]) -> list[str]:
     base_order = ["name", "price", "currency", "url", "image"]
     all_keys: set[str] = set()
@@ -27,6 +28,7 @@ def _build_fieldnames(rows: Iterable[Dict[str, Any]]) -> list[str]:
     rest = sorted(all_keys - set(fieldnames))
     fieldnames.extend(rest)
     return fieldnames
+
 
 def export_to_csv(data: list[Any], filename: str) -> None:
     if not data:
@@ -42,4 +44,3 @@ def export_to_csv(data: list[Any], filename: str) -> None:
         writer.writeheader()
         for row in rows:
             writer.writerow(row)
-

@@ -6,6 +6,7 @@ import types
 import main as app
 from parser.base import Product
 
+
 def test_run_searches_mock_returns_products(monkeypatch):
     # подменим build_cli, чтобы не мешал при импортировании в других местах
     importlib.reload(app)
@@ -26,6 +27,3 @@ def test_run_searches_mock_returns_products(monkeypatch):
     url = p.url if hasattr(p, "url") else p.get("url")
     assert name and isinstance(name, str)
     assert isinstance(url, str)
-
-
-

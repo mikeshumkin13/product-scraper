@@ -20,16 +20,19 @@ from telegram.constants import ChatAction
 from telegram.request import HTTPXRequest
 from dotenv import load_dotenv
 from telegram import Update
-from telegram.ext import Application, CommandHandler, MessageHandler, ContextTypes, filters
-
-
-
+from telegram.ext import (
+    Application,
+    CommandHandler,
+    MessageHandler,
+    ContextTypes,
+    filters,
+)
 
 
 # ── 1) Загружаем настройки из .env ─────────────────────────────────────────────
 load_dotenv()  # ищет .env в текущей рабочей директории (корень проекта)
 
-TOKEN = os.getenv("PS_BOT_TOKEN", "")       # токен бота
+TOKEN = os.getenv("PS_BOT_TOKEN", "")  # токен бота
 BROWSER_DEFAULT = os.getenv("PS_BROWSER", "chrome")
 MODE_DEFAULT = os.getenv("PS_MODE", "real")  # real|mock
 SLOW_DEFAULT = os.getenv("PS_SLOW", "1").lower() in ("1", "true", "yes", "on")
@@ -47,9 +50,17 @@ HELP_TEXT = (
     "• /real — режим real (Selenium)\n"
 )
 
+
 def build_app() -> Application:
     # подчистим возможные системные прокси, чтобы они не мешали
-    for var in ("http_proxy", "https_proxy", "HTTP_PROXY", "HTTPS_PROXY", "all_proxy", "ALL_PROXY"):
+    for var in (
+        "http_proxy",
+        "https_proxy",
+        "HTTP_PROXY",
+        "HTTPS_PROXY",
+        "all_proxy",
+        "ALL_PROXY",
+    ):
         os.environ.pop(var, None)
 
     # аккуратно парсим прокси из .env (если нужен)
@@ -68,9 +79,6 @@ def build_app() -> Application:
     return Application.builder().token(TOKEN).request(req).build()
 
 
-
-
-
 async def on_error(update: object, context: ContextTypes.DEFAULT_TYPE):
     # Лаконичный лог: чтобы видеть сетевые/прочие сбои PTB
     logging.warning("[PTB] error: %s", context.error)
@@ -82,7 +90,6 @@ async def on_error(update: object, context: ContextTypes.DEFAULT_TYPE):
             )
     except Exception:
         pass
-
 
 
 # ── 2) Утилиты ────────────────────────────────────────────────────────────────
@@ -132,7 +139,6 @@ async def handle_query(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
     await update.message.chat.send_action(ChatAction.TYPING)
 
-
     # Куда сохраняем CSV (во временную папку)
     ts = datetime.now().strftime("%Y%m%d_%H%M%S")
     outname = f"{query}_{ts}.csv".replace(" ", "_")
@@ -140,10 +146,16 @@ async def handle_query(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     # Команда запуска скрапера (main.py)
     cmd = [
-        "poetry", "run", "python", "src/main.py",
-        "--query", query,
-        "--mode", state["mode"],
-        "--output", outfile,
+        "poetry",
+        "run",
+        "python",
+        "src/main.py",
+        "--query",
+        query,
+        "--mode",
+        state["mode"],
+        "--output",
+        outfile,
     ]
     if state["mode"] == "real" and state["slow"]:
         cmd.append("--slow")
@@ -169,8 +181,12 @@ async def handle_query(update: Update, context: ContextTypes.DEFAULT_TYPE):
         log_tail = ((proc.stdout or "") + "\n" + (proc.stderr or ""))[-3500:]
 
         if proc.returncode != 0:
-            await update.message.reply_text("Парсер вернул ошибку. Отправляю хвост лога:")
-            await update.message.reply_text(f"```\n{log_tail}\n```", parse_mode="Markdown")
+            await update.message.reply_text(
+                "Парсер вернул ошибку. Отправляю хвост лога:"
+            )
+            await update.message.reply_text(
+                f"```\n{log_tail}\n```", parse_mode="Markdown"
+            )
             return
 
         if not os.path.exists(outfile) or os.path.getsize(outfile) == 0:
@@ -179,9 +195,13 @@ async def handle_query(update: Update, context: ContextTypes.DEFAULT_TYPE):
             )
             return
 
-        await update.message.reply_document(open(outfile, "rb"), filename=os.path.basename(outfile))
+        await update.message.reply_document(
+            open(outfile, "rb"), filename=os.path.basename(outfile)
+        )
     except subprocess.TimeoutExpired:
-        await update.message.reply_text("Время ожидания истекло. Попробуйте более узкий запрос.")
+        await update.message.reply_text(
+            "Время ожидания истекло. Попробуйте более узкий запрос."
+        )
     except Exception as e:
         await update.message.reply_text(f"Сбой запуска: `{e}`", parse_mode="Markdown")
 
@@ -201,8 +221,5 @@ def main():
     app.run_polling(drop_pending_updates=True, poll_interval=1.5)
 
 
-
 if __name__ == "__main__":
     main()
-
-

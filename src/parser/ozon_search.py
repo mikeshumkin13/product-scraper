@@ -74,7 +74,13 @@ def _fetch_product_info(session: requests.Session, product_url: str) -> Dict:
     scripts = seo.get("script", [])
     if not scripts:
         title = seo.get("title") or ""
-        return {"name": title, "price": None, "currency": None, "url": product_url, "image": None}
+        return {
+            "name": title,
+            "price": None,
+            "currency": None,
+            "url": product_url,
+            "image": None,
+        }
 
     ld = scripts[0].get("innerHTML", "")
     ld_json = json.loads(ld)
@@ -85,7 +91,13 @@ def _fetch_product_info(session: requests.Session, product_url: str) -> Dict:
     currency = offers.get("priceCurrency")
     image = ld_json.get("image")
 
-    return {"name": name, "price": price, "currency": currency, "url": product_url, "image": image}
+    return {
+        "name": name,
+        "price": price,
+        "currency": currency,
+        "url": product_url,
+        "image": image,
+    }
 
 
 def _dedupe_keep_order(items: Iterable[str]) -> List[str]:
@@ -113,11 +125,21 @@ def search_ozon(
     """
     if mode == "mock":
         from pathlib import Path
+
         html = Path("src/parser/mock/ozon_mock.html").read_text(encoding="utf-8")
         soup = BeautifulSoup(html, "html.parser")
         hrefs = [BASE + a["href"] for a in soup.select("a[href^='/product/']")]
         hrefs = _dedupe_keep_order(hrefs)[:10]
-        return [{"name": "MOCK item", "price": None, "currency": None, "url": h, "image": None} for h in hrefs]
+        return [
+            {
+                "name": "MOCK item",
+                "price": None,
+                "currency": None,
+                "url": h,
+                "image": None,
+            }
+            for h in hrefs
+        ]
 
     driver = get_selenium_driver(
         site="ozon",
@@ -133,7 +155,10 @@ def search_ozon(
 
         # мягко кликаем согласие на cookies, если всплыло
         try:
-            consent = driver.find_elements(By.XPATH, "//button[contains(., 'Согласен') or contains(., 'Я согласен')]")
+            consent = driver.find_elements(
+                By.XPATH,
+                "//button[contains(., 'Согласен') or contains(., 'Я согласен')]",
+            )
             if consent:
                 consent[0].click()
                 if slow:
@@ -169,5 +194,3 @@ def search_ozon(
             driver.quit()
         except Exception:
             pass
-
-

@@ -39,7 +39,12 @@ def search_citilink(
     Подход: находим все anchor'ы с `/product/`, из родителя вытягиваем цену.
     """
     url = f"{BASE}/search/?text={query}"
-    driver = get_selenium_driver(site="citilink", headless=False, use_profile=use_profile, profile_dir=profile_dir)
+    driver = get_selenium_driver(
+        site="citilink",
+        headless=False,
+        use_profile=use_profile,
+        profile_dir=profile_dir,
+    )
 
     try:
         driver.get(url)
@@ -55,7 +60,9 @@ def search_citilink(
             _slow(slow, 0.15)
 
         # собираем ссылки на карточки
-        anchors = driver.find_elements(By.CSS_SELECTOR, 'a[class*="Anchor"][href^="/product/"]')
+        anchors = driver.find_elements(
+            By.CSS_SELECTOR, 'a[class*="Anchor"][href^="/product/"]'
+        )
         results: List[Dict[str, str]] = []
 
         seen = set()
@@ -106,4 +113,3 @@ def search_citilink(
             driver.quit()
         except Exception:
             pass
-
