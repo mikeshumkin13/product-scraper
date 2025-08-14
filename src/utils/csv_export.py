@@ -37,7 +37,7 @@ def export_to_csv(data: list[Any], filename: str) -> None:
     rows = [_to_row(p) for p in data]
     fieldnames = _build_fieldnames(rows)
 
-    with open(filename, "w", newline="", encoding="utf-8") as f:
+    with open(filename, mode="w", newline="", encoding="utf-8-sig") as f:
         writer = csv.DictWriter(f, fieldnames=fieldnames)
         writer.writeheader()
         for row in rows:

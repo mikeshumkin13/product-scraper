@@ -138,18 +138,25 @@ async def handle_query(update: Update, context: ContextTypes.DEFAULT_TYPE):
     outname = f"{query}_{ts}.csv".replace(" ", "_")
     outfile = os.path.join(tempfile.gettempdir(), outname)
 
-    # Команда запуска твоего скрапера (main.py)
+    # Команда запуска скрапера (main.py)
     cmd = [
         "poetry", "run", "python", "src/main.py",
         "--query", query,
         "--mode", state["mode"],
-        "--sites", SITES_DEFAULT,
         "--output", outfile,
     ]
     if state["mode"] == "real" and state["slow"]:
         cmd.append("--slow")
 
-    # ── ВАЖНО: формируем окружение для дочернего процесса (см. объяснение ниже)
+    # Опционально: профиль браузера из .env
+    use_profile = os.getenv("PS_USE_PROFILE", "0").lower() in ("1", "true", "yes", "on")
+    profile_dir = (os.getenv("PS_PROFILE_DIR", "") or "").strip()
+    if use_profile:
+        cmd.append("--profile")
+    if use_profile and profile_dir:
+        cmd += ["--profile-dir", profile_dir]
+
+    # ✅ ВАЖНО: окружение для дочернего процесса (чтобы main.py увидел PS_BROWSER)
     env = os.environ.copy()
     env.setdefault("PS_BROWSER", BROWSER_DEFAULT)
 
@@ -158,6 +165,7 @@ async def handle_query(update: Update, context: ContextTypes.DEFAULT_TYPE):
         proc = subprocess.run(
             cmd, env=env, capture_output=True, text=True, timeout=1200
         )
+
         log_tail = ((proc.stdout or "") + "\n" + (proc.stderr or ""))[-3500:]
 
         if proc.returncode != 0:
