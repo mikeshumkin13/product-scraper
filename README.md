@@ -103,6 +103,8 @@ url, name, price, rating, description, instructions, country.
 Запуск:
 poetry run python src/goldapple_main.py --mode real --limit 100 --slow --output goldapple_perfume.csv
 
+# goldapple_perfume.csv 
+- сохранён в корне проекта. 
 
 ## Telegram-бот
 
@@ -229,4 +231,5 @@ Gold Apple (Парфюмерия) — реализовано по ТЗ.
 ## 👤 Автор
 
 GitHub: https://github.com/mikeshumkin13
+
 
