@@ -551,5 +551,3 @@ def search_goldapple(
             driver.quit()
         except Exception:
             pass
-
-
