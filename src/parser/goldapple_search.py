@@ -1,9 +1,14 @@
+"""Парсер раздела «Парфюмерия» Gold Apple.
+
+Собирает url, name, price, rating, description, instructions, country.
+Селекторы и эвристики рассчитаны на актуальную вёрстку Gold Apple.
+"""
+
 from __future__ import annotations
 
 import json
 import re
-from dataclasses import dataclass
-from typing import List, Optional, Iterable
+from typing import List, Optional
 
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
@@ -16,32 +21,26 @@ from selenium.common.exceptions import (
 
 from utils.selenium_driver import get_selenium_driver
 from utils.helpers import human_sleep, load_site_cookies
-
-GA_BASE = "https://goldapple.ru"
-GA_PERFUMERY_SLUGS = ("/parfjumerija", "/parfyumeriya")
-
-TAB_OPISANIE = "Описание"
-TAB_PRIMENENIE = "Применение"
-TAB_BREND = "Бренд"
-TAB_DOP = "Дополнительная информация"
-
-WAIT_SHORT = 8
-WAIT_MED = 16
-WAIT_LONG = 28
-
-DESC_LIMIT = 200
-INSTR_LIMIT = 200
-
-
-@dataclass
-class GAProduct:
-    url: str = ""
-    name: str = ""
-    price: str = ""
-    rating: str = ""
-    description: str = ""
-    instructions: str = ""
-    country: str = ""
+from parser.entities import GAProduct
+from parser.constants import (
+    GA_BASE,
+    GA_PERFUMERY_SLUGS,
+    TAB_OPISANIE,
+    TAB_PRIMENENIE,
+    TAB_BREND,
+    TAB_DOP,
+    WAIT_SHORT,
+    WAIT_MED,
+    WAIT_LONG,
+    DESC_LIMIT,
+    INSTR_LIMIT,
+    COUNTRIES,
+)
+from utils.text_utils import (
+    clean_text as _clean_text,
+    shorten_text as _shorten_text,
+    digits as _digits,
+)
 
 
 # ----------------- helpers -----------------
@@ -49,36 +48,6 @@ class GAProduct:
 
 def _sleep(slow: bool, a: float = 0.3, b: float = 0.7) -> None:
     human_sleep(slow, a, b)
-
-
-def _clean_text(s: str) -> str:
-    if not s:
-        return ""
-    s = s.replace("\u00a0", " ")
-    s = re.sub(r"[ \t]+", " ", s)
-    s = re.sub(r"\s+\n", "\n", s)
-    s = re.sub(r"\n{3,}", "\n\n", s)
-    return s.strip()
-
-
-def _shorten_text(s: str, limit: Optional[int]) -> str:
-    if not s or not limit:
-        return s or ""
-    s = _clean_text(s)
-    if len(s) <= limit:
-        return s
-    # по границе предложения, затем по слову
-    m = re.search(rf"^(.{{0,{limit}}}[.!?])\s", s)
-    if m and len(m.group(1)) >= int(limit * 0.6):
-        return m.group(1).strip() + "…"
-    cut = s[:limit]
-    if " " in cut:
-        cut = cut.rsplit(" ", 1)[0]
-    return cut.strip() + "…"
-
-
-def _digits(text: str) -> str:
-    return "".join(ch for ch in (text or "") if ch.isdigit())
 
 
 def _on_not_found(driver) -> bool:
@@ -173,28 +142,102 @@ def _grab_from_dom(driver) -> List[str]:
     return hrefs
 
 
-def _collect_links_infinite(driver, limit: int, slow: bool = False) -> List[str]:
+# --- стабильный сбор ссылок ---
+
+
+def _collect_links_paged(
+    driver, base_url: str, limit: int, slow: bool = False
+) -> List[str]:
+    """Обходит страницы каталога по ``?p=1,2,...`` и собирает ссылки.
+
+    Args:
+        driver: Selenium WebDriver.
+        base_url: Базовый URL категории без параметров.
+        limit: Максимум ссылок к сбору.
+        slow: Включить человеко-паузы.
+
+    Returns:
+        Список уникальных ссылок на PDP (до ``limit`` штук).
+    """
     hrefs: List[str] = []
     seen: set[str] = set()
-    idle = 0
-    while True:
-        new = _grab_from_dom(driver)
+    page = 1
+    empty_pages = 0
+
+    while len(hrefs) < limit and empty_pages < 2:  # две пустые подряд — конец каталога
+        url = f"{base_url}?p={page}"
+        driver.get(url)
+        _sleep(slow, 0.6, 1.2)
+        _dismiss_banners(driver)
+        try:
+            _wait(driver, "article", timeout=WAIT_MED)
+        except TimeoutException:
+            empty_pages += 1
+            page += 1
+            continue
+
+        added_here = 0
+        for h in _grab_from_dom(driver):
+            if h not in seen:
+                seen.add(h)
+                hrefs.append(h)
+                added_here += 1
+                if len(hrefs) >= limit:
+                    break
+
+        empty_pages = 0 if added_here else empty_pages + 1
+        page += 1
+
+    return hrefs[:limit]
+
+
+def _collect_links_infinite(driver, limit: int, slow: bool = False) -> List[str]:
+    """Собирает ссылки из бесконечного скролла.
+
+    Прокручивает страницу вниз и ждёт, пока реально вырастет число ``article``.
+    Ограничивается ``limit`` и счётчиком стагнации.
+    """
+    hrefs: List[str] = []
+    seen: set[str] = set()
+    stagnation = 0
+    cards_sel = "article"
+    last_cards = 0
+
+    while len(hrefs) < limit and stagnation < 6:
+        # 1) собрать всё, что есть сейчас
         added = 0
-        for h in new:
+        for h in _grab_from_dom(driver):
             if h not in seen:
                 seen.add(h)
                 hrefs.append(h)
                 added += 1
-                if limit and len(hrefs) >= limit:
+                if len(hrefs) >= limit:
                     return hrefs
-        idle = idle + 1 if added == 0 else 0
-        if idle >= 8:
-            return hrefs
+
+        # 2) проскроллить в самый низ
         try:
-            driver.execute_script("window.scrollBy(0, 1400);")
+            driver.execute_script(
+                "window.scrollTo(0, document.body.scrollHeight - 200);"
+            )
         except Exception:
             pass
-        _sleep(slow, 0.15, 0.35)
+
+        # 3) подождать реальный прирост количества article
+        grew = False
+        for _ in range(30):  # ~3–6 сек с короткими паузами
+            try:
+                cur = len(driver.find_elements(By.CSS_SELECTOR, cards_sel))
+            except Exception:
+                cur = last_cards
+            if cur > last_cards:
+                last_cards = cur
+                grew = True
+                break
+            _sleep(True, 0.10, 0.20)
+
+        stagnation = 0 if (added or grew) else (stagnation + 1)
+
+    return hrefs[:limit]
 
 
 # ----------------- PDP helpers -----------------
@@ -323,9 +366,9 @@ def _click_tab(driver, label: str) -> bool:
 
 
 def _active_panel_text(driver) -> str:
-    """
-    Текст активной панели табов. У GA основной контейнер бывает .vSCKP ИЛИ .VSCKP.
-    Берём кейс-инсенситивом + пару запасных селекторов.
+    """Возвращает текст активной панели табов на PDP.
+
+    Ищет контейнеры вида ``.vSCKP/.VSCKP`` и альтернативные блоки внутри ``article``.
     """
     xps = [
         # case-insensitive match for class contains 'vsckp'
@@ -347,32 +390,6 @@ def _active_panel_text(driver) -> str:
         except Exception:
             continue
     return _clean_text("\n".join(texts))
-
-
-COUNTRIES = [
-    "Россия",
-    "РФ",
-    "Беларусь",
-    "Казахстан",
-    "Франция",
-    "Италия",
-    "Испания",
-    "Германия",
-    "Швейцария",
-    "США",
-    "Великобритания",
-    "ОАЭ",
-    "Турция",
-    "Польша",
-    "Нидерланды",
-    "Швеция",
-    "Дания",
-    "Ирландия",
-    "Корея",
-    "Южная Корея",
-    "Япония",
-    "Китай",
-]
 
 
 def _brand_country_short(driver) -> str:
@@ -509,6 +526,18 @@ def search_goldapple(
     use_profile: bool = False,
     profile_dir: str | None = None,
 ) -> List[GAProduct]:
+    """Точка входа: собирает товары из раздела «Парфюмерия».
+
+    Args:
+        mode: 'real' | 'mock'. В 'mock' возвратит пустой список.
+        limit: Макс. количество товаров к сбору.
+        slow: Человеко-паузы (медленнее, но стабильнее).
+        use_profile: Поднять Chrome с указанным профилем.
+        profile_dir: Папка профиля Chrome.
+
+    Returns:
+        Список ``GAProduct`` для выгрузки в CSV.
+    """
     if mode == "mock":
         return []
 
@@ -531,7 +560,13 @@ def search_goldapple(
         except TimeoutException:
             return items
 
-        links = _collect_links_infinite(driver, limit=limit or 100, slow=slow)
+        category_url = driver.current_url.split("?", 1)[0]  # чистый URL категории
+        links = _collect_links_paged(
+            driver, category_url, limit=limit or 100, slow=slow
+        )
+        if len(links) < (limit or 100) // 3:  # на случай, если пагинации нет/сломалась
+            links = _collect_links_infinite(driver, limit=limit or 100, slow=slow)
+
         # dedupe
         seen, uniq = set(), []
         for h in links:
