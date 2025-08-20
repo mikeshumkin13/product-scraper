@@ -4,10 +4,7 @@ import os
 from pathlib import Path
 from typing import Optional
 
-# Chrome (anti‑bot)
 import undetected_chromedriver as uc
-
-# Firefox
 from selenium import webdriver as _wd
 from selenium.webdriver.firefox.options import Options as FirefoxOptions
 from selenium.webdriver.firefox.service import Service as FirefoxService
@@ -36,6 +33,12 @@ def _make_chrome(headless: bool, use_profile: bool, profile_dir: Optional[str]):
     options = uc.ChromeOptions()
     _apply_profile_chrome(options, use_profile, profile_dir)
 
+    # быстрее: не ждём загрузки картинок/рекламы
+    try:
+        options.page_load_strategy = "eager"
+    except Exception:
+        pass
+
     if headless:
         options.add_argument("--headless=new")
     options.add_argument("--no-sandbox")
@@ -47,7 +50,6 @@ def _make_chrome(headless: bool, use_profile: bool, profile_dir: Optional[str]):
     options.add_argument("--window-size=1280,900")
     options.add_argument(f"--user-agent={DEFAULT_USER_AGENT}")
 
-    # у UDC Safari-style аргументы типа excludeSwitches/useAutomationExtension добавлять НЕ нужно
     return uc.Chrome(options=options, headless=headless)
 
 
@@ -56,34 +58,32 @@ def _apply_profile_firefox(
 ) -> None:
     if not use_profile:
         return
-    # Firefox ждёт ПАПКУ ПРОФИЛЯ, а не корень каталога
     if not profile_dir:
-        # возьмём дефолтный каталог профилей Firefox на macOS
         base = Path.home() / "Library/Application Support/Firefox/Profiles"
-        # берём первый попавшийся *.default* если есть
         candidates = list(base.glob("*.default*"))
         if candidates:
             profile_dir = str(candidates[0])
         else:
-            # дадим Firefox создать временный профиль — просто выходим
             return
     opts.set_preference("profile", profile_dir)
 
 
 def _make_firefox(headless: bool, use_profile: bool, profile_dir: Optional[str]):
     opts = FirefoxOptions()
+    try:
+        opts.page_load_strategy = "eager"
+    except Exception:
+        pass
+
     if headless:
         opts.add_argument("-headless")
-
-    # лёгкий антибот для FF
     opts.set_preference("dom.webdriver.enabled", False)
     opts.set_preference("useAutomationExtension", False)
     opts.set_preference("media.peerconnection.enabled", False)
     opts.set_preference("privacy.trackingprotection.enabled", True)
     _apply_profile_firefox(opts, use_profile, profile_dir)
 
-    # geckodriver должен быть в PATH (brew install geckodriver)
-    service = FirefoxService()  # без явного пути, возьмёт из PATH
+    service = FirefoxService()
     driver = _wd.Firefox(service=service, options=opts)
     driver.set_window_size(1280, 900)
     return driver
@@ -95,21 +95,13 @@ def get_selenium_driver(
     headless: bool = False,
     use_profile: bool = False,
     profile_dir: Optional[str] = None,
-    browser: Optional[str] = None,  # "chrome" | "firefox" | None
+    browser: Optional[str] = None,
 ):
-    """
-    Унифицированный конструктор Selenium‑драйвера.
-    Браузер выбирается:
-      1) аргументом `browser`,
-      2) или из переменной окружения PS_BROWSER (firefox|chrome),
-      3) по умолчанию — chrome (undetected_chromedriver).
-    """
     choice = (browser or os.getenv("PS_BROWSER") or "chrome").lower()
     if choice == "firefox":
         return _make_firefox(
             headless=headless, use_profile=use_profile, profile_dir=profile_dir
         )
-    # по умолчанию — Chrome через UDC
     return _make_chrome(
         headless=headless, use_profile=use_profile, profile_dir=profile_dir
     )
