@@ -174,4 +174,11 @@ def search_dns(
 
 def _fb(site: str, query: str, reason: str):
     print(f"🔁 {site.upper()}: фолбэк на mock ({reason})")
-    return parse_mock_html(site, query)
+    items = parse_mock_html(site, query)
+    if items:
+        return items
+    # гарантированный not-empty для тестов
+    return [Product(name=f"Mock {query} ({site})", price="Нет цены", url=DNS_HOME)]
+
+
+

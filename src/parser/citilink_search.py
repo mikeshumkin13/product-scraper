@@ -38,6 +38,26 @@ def search_citilink(
       — цена находится в span внутри карточки; берём первое число из всех span’ов-кандидатов
     Подход: находим все anchor'ы с `/product/`, из родителя вытягиваем цену.
     """
+
+    if mode == "mock":
+        # Лёгкий фиктивный набор для тестов
+        return [
+            {
+                "name": "Чайник электрический MOCK A",
+                "price": "1990",
+                "rating": "4.6",
+                "url": "https://www.citilink.ru/product/mock-a/",
+                "image": "https://example.com/mock-a.jpg",
+            },
+            {
+                "name": "Чайник электрический MOCK B",
+                "price": "2490",
+                "rating": "4.7",
+                "url": "https://www.citilink.ru/product/mock-b/",
+                "image": "https://example.com/mock-b.jpg",
+            },
+        ]
+
     url = f"{BASE}/search/?text={query}"
     driver = get_selenium_driver(
         site="citilink",

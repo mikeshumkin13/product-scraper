@@ -52,3 +52,5 @@ def test_export_csv_mock_end_to_end():
         assert first is not None
         assert first[0] != ""  # name
         assert first[3].startswith("http") or first[3] == ""  # url может быть пуст
+
+

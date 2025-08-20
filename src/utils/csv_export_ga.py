@@ -17,7 +17,7 @@ def export_to_csv_goldapple(rows: Iterable[dict], output_path: str) -> None:
         "instructions",
         "country",
     ]
-    with open(output_path, "w", encoding="utf-8-sig", newline="") as f:
+    with open(output_path, "w", encoding="utf-8", newline="") as f:
         w = csv.DictWriter(f, fieldnames=headers)
         w.writeheader()
         for r in rows:

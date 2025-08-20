@@ -39,9 +39,16 @@ pytest = "^8.4.1"
 flake8 = "^7.3.0"
 black = "^25.1.0"
 isort = "^6.0.1"
+pytest-cov = "^6.2.1"
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.pytest.ini_options]
+markers = [
+  "goldapple: tests for Gold Apple scraper"
+]
+
 
 

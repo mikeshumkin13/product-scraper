@@ -1,6 +1,7 @@
 import csv
 from typing import Any, Dict, Iterable
 
+
 try:
     # опционально: если Product есть, хорошо; если нет — не критично
     from parser.base import Product  # type: ignore
@@ -17,6 +18,9 @@ def _to_row(obj: Any) -> Dict[str, Any]:
         return {k: v for k, v in vars(obj).items() if not k.startswith("_")}
     # последний шанс — строка в name
     return {"name": str(obj)}
+
+
+SCHEMA = ["name", "price", "currency", "url", "image"]
 
 
 def _build_fieldnames(rows: Iterable[Dict[str, Any]]) -> list[str]:
@@ -37,10 +41,13 @@ def export_to_csv(data: list[Any], filename: str) -> None:
 
     # нормализуем все элементы к словарям
     rows = [_to_row(p) for p in data]
-    fieldnames = _build_fieldnames(rows)
 
-    with open(filename, mode="w", newline="", encoding="utf-8-sig") as f:
-        writer = csv.DictWriter(f, fieldnames=fieldnames)
+    # Пишем строго по ожидаемой тестами схеме (лишние ключи игнорируются)
+    with open(filename, mode="w", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=SCHEMA, extrasaction="ignore")
         writer.writeheader()
         for row in rows:
-            writer.writerow(row)
+            writer.writerow(
+                {k: ("" if row.get(k) is None else row.get(k)) for k in SCHEMA}
+            )
+

@@ -10,9 +10,10 @@ def clean_text(s: str) -> str:
     if not s:
         return ""
     s = s.replace("\u00a0", " ")
-    s = re.sub(r"[ \t]+", " ", s)
-    s = re.sub(r"\s+\n", "\n", s)
-    s = re.sub(r"\n{3,}", "\n\n", s)
+    s = re.sub(r"[ \t]+", " ", s)  # множественные пробелы/табы → один пробел
+    s = re.sub(r"[ \t]+\n", "\n", s)  # УБИРАЕМ ТОЛЬКО ПРОБЕЛЫ/ТАБЫ перед \n,
+    s = re.sub(r"\n{3,}", "\n\n", s)  # 3+ переводов строки → 2 перевода
+    s = re.sub(r"\n[ \t]+", "\n", s)  # ПРОБЕЛЫ ПОСЛЕ \n
     return s.strip()
 
 
