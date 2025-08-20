@@ -1,0 +1,300 @@
+[
+  {
+    "domain": "www.dns-shop.ru",
+    "expiry": 1754747333,
+    "httpOnly": false,
+    "name": "tmr_detect",
+    "path": "/",
+    "sameSite": "Lax",
+    "secure": false,
+    "value": "0%7C1754660933396"
+  },
+  {
+    "domain": ".dns-shop.ru",
+    "expiry": 1786196931,
+    "httpOnly": false,
+    "name": "cartUserCookieIdent_v3",
+    "path": "/",
+    "sameSite": "Lax",
+    "secure": false,
+    "value": "137e1972a722190ed79629f1234665cca45385691f6f3df78de9c6c5725300afa%3A2%3A%7Bi%3A0%3Bs%3A22%3A%22cartUserCookieIdent_v3%22%3Bi%3A1%3Bs%3A36%3A%2283a5f1be-cccb-3005-9ad5-73367a11a3d6%22%3B%7D"
+  },
+  {
+    "domain": ".dns-shop.ru",
+    "expiry": 1754660940,
+    "httpOnly": false,
+    "name": "rr-testCookie",
+    "path": "/",
+    "sameSite": "Lax",
+    "secure": false,
+    "value": "testvalue"
+  },
+  {
+    "domain": ".dns-shop.ru",
+    "expiry": 1786196931,
+    "httpOnly": false,
+    "name": "date-user-last-order-v2",
+    "path": "/",
+    "sameSite": "Lax",
+    "secure": false,
+    "value": "8a0959c6170daf8712c77f5448afa3aba2062a69aefbbad68eb530f68cf8dba2a%3A2%3A%7Bi%3A0%3Bs%3A23%3A%22date-user-last-order-v2%22%3Bi%3A1%3Bi%3A-36000%3B%7D"
+  },
+  {
+    "domain": "www.dns-shop.ru",
+    "httpOnly": true,
+    "name": "_csrf",
+    "path": "/",
+    "sameSite": "Lax",
+    "secure": false,
+    "value": "72a2ebf630a7efc9f824e66054d65c651b7bebeb8d7b1028d00ede513dda632aa%3A2%3A%7Bi%3A0%3Bs%3A5%3A%22_csrf%22%3Bi%3A1%3Bs%3A32%3A%221t04DMDSyjOs1gUNAXtyVgcmyxcdowjq%22%3B%7D"
+  },
+  {
+    "domain": "www.dns-shop.ru",
+    "expiry": 1757339330,
+    "httpOnly": false,
+    "name": "ab_spa",
+    "path": "/",
+    "sameSite": "Lax",
+    "secure": false,
+    "value": "%7B%22endless-feed-test%22%3A%22list_5%22%7D"
+  },
+  {
+    "domain": ".dns-shop.ru",
+    "expiry": 1786197829,
+    "httpOnly": true,
+    "name": "auth_ssid",
+    "path": "/",
+    "sameSite": "Lax",
+    "secure": true,
+    "value": "9445774fc10166b9ce8ad139c2724f8c38b64c546550a7abbeee0d6f473584fa"
+  },
+  {
+    "domain": ".dns-shop.ru",
+    "expiry": 1786196821,
+    "httpOnly": false,
+    "name": "_ym_uid",
+    "path": "/",
+    "sameSite": "None",
+    "secure": true,
+    "value": "1754660821670845806"
+  },
+  {
+    "domain": ".dns-shop.ru",
+    "httpOnly": false,
+    "name": "lang",
+    "path": "/",
+    "sameSite": "Lax",
+    "secure": false,
+    "value": "ru"
+  },
+  {
+    "domain": ".dns-shop.ru",
+    "expiry": 1789220931,
+    "httpOnly": false,
+    "name": "_ga_FLS4JETDHW",
+    "path": "/",
+    "sameSite": "Lax",
+    "secure": false,
+    "value": "GS2.1.s1754660818$o1$g1$t1754660931$j19$l0$h344514664"
+  },
+  {
+    "domain": "www.dns-shop.ru",
+    "expiry": 1786196931,
+    "httpOnly": false,
+    "name": "_ymab_param",
+    "path": "/",
+    "sameSite": "None",
+    "secure": true,
+    "value": "wMXqAw2mtGPd2C6zLjn5-EVJeJFC4c6aeNbqPg_rrE_5LBtkTHKg1UdbPreamUZRp8S-GkDSkXoagStUtHNhE_xBtco"
+  },
+  {
+    "domain": ".dns-shop.ru",
+    "expiry": 1786196930,
+    "httpOnly": false,
+    "name": "rrpvid",
+    "path": "/",
+    "sameSite": "Lax",
+    "secure": false,
+    "value": "656749354256707"
+  },
+  {
+    "domain": "www.dns-shop.ru",
+    "expiry": 1755265622,
+    "httpOnly": false,
+    "name": "domain_sid",
+    "path": "/",
+    "sameSite": "Lax",
+    "secure": false,
+    "value": "ajzeFCnqAzdIVcJXewGkU%3A1754660822201"
+  },
+  {
+    "domain": ".dns-shop.ru",
+    "expiry": 1786197829,
+    "httpOnly": true,
+    "name": "auth_refresh_token",
+    "path": "/",
+    "sameSite": "Lax",
+    "secure": true,
+    "value": "0ae478edba78adee6773b4608ca79a5b6a9c94c80ae46486d9e808dcff5b7007"
+  },
+  {
+    "domain": ".dns-shop.ru",
+    "expiry": 1757252931,
+    "httpOnly": false,
+    "name": "IsInterregionalPickupAllowed",
+    "path": "/",
+    "sameSite": "Lax",
+    "secure": false,
+    "value": "true"
+  },
+  {
+    "domain": ".dns-shop.ru",
+    "expiry": 1754661829,
+    "httpOnly": true,
+    "name": "auth_access_token",
+    "path": "/",
+    "sameSite": "Lax",
+    "secure": true,
+    "value": "eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRoU1NJRCI6Ijk0NDU3NzRmYzEwMTY2YjljZThhZDEzOWMyNzI0ZjhjMzhiNjRjNTQ2NTUwYTdhYmJlZWUwZDZmNDczNTg0ZmEiLCJleHAiOjE3NTQ2NjE4MjksInJuZCI6IiIsInVzZXJJZCI6IjAxNDgyMTMwLTgzZGYtZGRjMC1lMTJmLTAzMDVjMzU4ODlmMSIsInVzZXJOYW1lIjoiIn0.MEUCIDrT_V36ilxCD9_vYUQjZUIGs2Cakt4HbF3IvJhmcdCvAiEAyudg3cZTwJhEyiFDYDG6t_G5cc89BYsIOjnSoSDJ240"
+  },
+  {
+    "domain": "www.dns-shop.ru",
+    "expiry": 1759844821,
+    "httpOnly": false,
+    "name": "rai",
+    "path": "/",
+    "sameSite": "Lax",
+    "secure": false,
+    "value": "18542a9982d19dfbde5a06fe45c9deb2"
+  },
+  {
+    "domain": ".dns-shop.ru",
+    "expiry": 1754732821,
+    "httpOnly": false,
+    "name": "_ym_isad",
+    "path": "/",
+    "sameSite": "None",
+    "secure": true,
+    "value": "2"
+  },
+  {
+    "domain": ".dns-shop.ru",
+    "expiry": 1786196821,
+    "httpOnly": false,
+    "name": "_ym_d",
+    "path": "/",
+    "sameSite": "None",
+    "secure": true,
+    "value": "1754660821"
+  },
+  {
+    "domain": ".dns-shop.ru",
+    "expiry": 1786196824,
+    "httpOnly": false,
+    "name": "current_path",
+    "path": "/",
+    "sameSite": "Lax",
+    "secure": false,
+    "value": "87e44df1f9ba1c27821aeb760dec290391940e945b796b117e5a635ed3c72579a%3A2%3A%7Bi%3A0%3Bs%3A12%3A%22current_path%22%3Bi%3A1%3Bs%3A127%3A%22%7B%22city%22%3A%2258882a7b-2c95-11ef-921d-0050569d9cb8%22%2C%22cityName%22%3A%22%5Cu0422%5Cu043e%5Cu0440%5Cu0431%5Cu0435%5Cu0435%5Cu0432%5Cu043e%22%2C%22method%22%3A%22manual%22%7D%22%3B%7D"
+  },
+  {
+    "domain": ".dns-shop.ru",
+    "expiry": 1783432130,
+    "httpOnly": false,
+    "name": "tmr_lvidTS",
+    "path": "/",
+    "sameSite": "Lax",
+    "secure": false,
+    "value": "1754660820720"
+  },
+  {
+    "domain": ".dns-shop.ru",
+    "expiry": 1783432130,
+    "httpOnly": false,
+    "name": "tmr_lvid",
+    "path": "/",
+    "sameSite": "Lax",
+    "secure": false,
+    "value": "4e05dbd63534ab9faf6c6f042ecc89f5"
+  },
+  {
+    "domain": ".dns-shop.ru",
+    "expiry": 1789220930,
+    "httpOnly": false,
+    "name": "_ga",
+    "path": "/",
+    "sameSite": "Lax",
+    "secure": false,
+    "value": "GA1.1.1690324807.1754660819"
+  },
+  {
+    "domain": "www.dns-shop.ru",
+    "expiry": 1754747329,
+    "httpOnly": true,
+    "name": "PHPSESSID",
+    "path": "/",
+    "sameSite": "Lax",
+    "secure": false,
+    "value": "c621cd20ce368532b8371bea90133361"
+  },
+  {
+    "domain": ".dns-shop.ru",
+    "expiry": 1762436818,
+    "httpOnly": false,
+    "name": "_gcl_au",
+    "path": "/",
+    "sameSite": "Lax",
+    "secure": false,
+    "value": "1.1.2022243089.1754660819"
+  },
+  {
+    "domain": ".dns-shop.ru",
+    "expiry": 1786196930,
+    "httpOnly": false,
+    "name": "rcuid",
+    "path": "/",
+    "sameSite": "Lax",
+    "secure": false,
+    "value": "6895ffd22658d687901c18b5"
+  },
+  {
+    "domain": ".dns-shop.ru",
+    "expiry": 1754747290,
+    "httpOnly": true,
+    "name": "dnsauth_csrf",
+    "path": "/",
+    "sameSite": "Lax",
+    "secure": true,
+    "value": "13d51c14ec61301cccceced62be4caa512ed657fb16577f83de3837d1ecd7d26a%3A2%3A%7Bi%3A0%3Bs%3A12%3A%22dnsauth_csrf%22%3Bi%3A1%3Bs%3A36%3A%22301a6e59-c90a-4bfd-b37d-6b26190ffd0f%22%3B%7D"
+  },
+  {
+    "domain": ".dns-shop.ru",
+    "expiry": 1786196931,
+    "httpOnly": false,
+    "name": "auth_public_uid",
+    "path": "/",
+    "sameSite": "Lax",
+    "secure": false,
+    "value": "08b8e64cf4d3089332fb35608e40b134"
+  },
+  {
+    "domain": ".dns-shop.ru",
+    "expiry": 1754661812,
+    "httpOnly": true,
+    "name": "qrator_jsid2",
+    "path": "/",
+    "sameSite": "None",
+    "secure": true,
+    "value": "v2.0.1754660810.797.053d378d3UeK2Wc3|9Tb8HpUEgwJYdJXT|Chvw8i9UbXLFLqdkQ77peaiKTC8cdGReRLTjRMGgpdorIpNYosTYnTVP84oHJXmghz0LfQaWdJEvpgfP+RlZG6c0k/fJBMeR1RxO+AdaXpkA10ws+rRj6Mmz+oLHQe6d01nAXgA+Lqm15ep7tosY2Q==-8mFXy7TKPtoGdpx1NMAlfvnqZmk="
+  },
+  {
+    "domain": ".dns-shop.ru",
+    "expiry": 1754661110,
+    "httpOnly": false,
+    "name": "qrator_jsr",
+    "path": "/",
+    "sameSite": "None",
+    "secure": true,
+    "value": "v2.0.1754660810.797.053d378d3UeK2Wc3|BzJx4ikqEV0o6zWi|ZfpbkFJDl+ObJuaLTI7DtUNpvFF2gch8J8qirYA44d7fxvpOe9w1seCbROJMWtt7EXCBs4C4om0zHjF/Ys/qZg==-Gjtz48ikRwSH/y60L8h5iRaF2O4=-00"
+  }
+]
